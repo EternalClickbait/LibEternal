@@ -1,10 +1,12 @@
-﻿﻿using System;
+﻿﻿using JetBrains.Annotations;
+ using System;
 
-namespace BetterUdp.Abstraction
+ namespace LibEternal.Abstraction
 {
 	/// <summary>
 	///     An abstract class that provides a single method (<see cref="DisposeInherited" />) that should be overriden to dispose of any objects. Calling of the function will be handled automatically
 	/// </summary>
+	[PublicAPI]
 	public abstract class SmartDisposable : IDisposable
 	{
 		/// <summary>
