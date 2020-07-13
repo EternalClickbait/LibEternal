@@ -3,52 +3,57 @@ using System;
 
 namespace LibEternal.Extensions
 {
+	//Got this from https://stackoverflow.com/a/13095144
 	[PublicAPI]
-	public static class RandomExtensions
-	{
-		public static long RandomLong(this Random rnd)
-		{
-			byte[] buffer = new byte[8];
-			rnd.NextBytes (buffer);
-			return BitConverter.ToInt64(buffer, 0);
-		}
+    public static class RandomExtensions
+    {
+        /// <summary>
+        /// Returns a random long from min (inclusive) to max (exclusive)
+        /// </summary>
+        /// <param name="random">The given random instance</param>
+        /// <param name="min">The inclusive minimum bound</param>
+        /// <param name="max">The exclusive maximum bound.  Must be greater than min</param>
+        public static long NextLong(this Random random, long min, long max)
+        {
+            if (max <= min)
+                throw new ArgumentOutOfRangeException(nameof(max), "Max must be > min!");
 
-		public static long RandomLong(this Random rnd, long min, long max)
-		{
-			EnsureMinLEQMax(ref min, ref max);
-			long numbersInRange = unchecked(max - min + 1);
-			if (numbersInRange < 0)
-				throw new ArgumentException("Size of range between min and max must be less than or equal to Int64.MaxValue");
+            //Working with ulong so that modulo works correctly with values > long.MaxValue
+            ulong uRange = (ulong)(max - min);
 
-			long randomOffset = RandomLong(rnd);
-			if (IsModuloBiased(randomOffset, numbersInRange))
-				return RandomLong(rnd, min, max); // Try again
-			else
-				return min + PositiveModuloOrZero(randomOffset, numbersInRange);
-		}
+            //Prevent a modulo bias; see https://stackoverflow.com/a/10984975/238419
+            //for more information.
+            //In the worst case, the expected number of calls is 2 (though usually it's
+            //much closer to 1) so this loop doesn't really hurt performance at all.
+            ulong ulongRand;
+            do
+            {
+                byte[] buf = new byte[8];
+                random.NextBytes(buf);
+                ulongRand = (ulong)BitConverter.ToInt64(buf, 0);
+            } while (ulongRand > ulong.MaxValue - ((ulong.MaxValue % uRange) + 1) % uRange);
 
-		private static bool IsModuloBiased(long randomOffset, long numbersInRange)
-		{
-			long greatestCompleteRange = numbersInRange * (long.MaxValue / numbersInRange);
-			return randomOffset > greatestCompleteRange;
-		}
+            return (long)(ulongRand % uRange) + min;
+        }
 
-		private static long PositiveModuloOrZero(long dividend, long divisor)
-		{
-			Math.DivRem(dividend, divisor, out long mod);
-			if(mod < 0)
-				mod += divisor;
-			return mod;
-		}
+        /// <summary>
+        /// Returns a random long from 0 (inclusive) to max (exclusive)
+        /// </summary>
+        /// <param name="random">The given random instance</param>
+        /// <param name="max">The exclusive maximum bound.  Must be greater than 0</param>
+        public static long NextLong(this Random random, long max)
+        {
+            return random.NextLong(0, max);
+        }
 
-		// ReSharper disable once InconsistentNaming
-		private static void EnsureMinLEQMax(ref long min, ref long max)
-		{
-			if(min <= max)
-				return;
-			long temp = min;
-			min = max;
-			max = temp;
-		}
-	}
+        /// <summary>
+        /// Returns a random long over all possible values of long (except long.MaxValue, similar to
+        /// random.Next())
+        /// </summary>
+        /// <param name="random">The given random instance</param>
+        public static long NextLong(this Random random)
+        {
+            return random.NextLong(long.MinValue, long.MaxValue);
+        }
+    }
 }
