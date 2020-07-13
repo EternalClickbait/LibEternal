@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibEternal", "LibEternal\LibEternal.csproj", "{77CDCD9C-1D4A-43A4-9262-D6FF3B25B33B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibEternal.Unity", "LibEternal.Unity\LibEternal.Unity.csproj", "{95C79D97-B22A-4A8E-93B5-3AFAF52137C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{77CDCD9C-1D4A-43A4-9262-D6FF3B25B33B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{77CDCD9C-1D4A-43A4-9262-D6FF3B25B33B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{77CDCD9C-1D4A-43A4-9262-D6FF3B25B33B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{95C79D97-B22A-4A8E-93B5-3AFAF52137C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{95C79D97-B22A-4A8E-93B5-3AFAF52137C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{95C79D97-B22A-4A8E-93B5-3AFAF52137C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{95C79D97-B22A-4A8E-93B5-3AFAF52137C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
