@@ -60,7 +60,7 @@ namespace LibEternal.Unity.Editor.Editor
 
 			if (shortView)
 			{
-				string FormatMethodName(MethodInfo methodInfo)
+				static string FormatMethodName(MethodInfo methodInfo)
 				{
 					return methodInfo.DeclaringType?.FullName?.Replace('.', '/').Replace('+', '/') + '/' + methodInfo.Name;
 				}
