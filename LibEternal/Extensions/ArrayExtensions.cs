@@ -1,4 +1,4 @@
-﻿using JetBrains.Annotations;
+﻿using LibEternal.JetBrains.Annotations;
 using System.Collections.Generic;
 using System.Text;
 

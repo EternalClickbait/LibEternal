@@ -1,5 +1,6 @@
-using JetBrains.Annotations;
+using LibEternal.JetBrains.Annotations;
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Text.RegularExpressions;
 
@@ -13,6 +14,7 @@ namespace LibEternal.Helper
 	///     Supports both linux-style and windows-style parameter arguments.
 	/// </summary>
 	// ReSharper restore CommentTypo
+	[PublicAPI]
 	public class ArgumentParser
 	{
 		// Variables
@@ -23,7 +25,7 @@ namespace LibEternal.Helper
 		}
 
 		// Constructor
-		public ArgumentParser(string[] args)
+		public ArgumentParser(IReadOnlyList<string> args)
 		{
 			parameters = new StringDictionary();
 			Regex splitter = new Regex(@"^-{1,2}|^/|=|:",
@@ -39,7 +41,7 @@ namespace LibEternal.Helper
 			// Examples: 
 			// -param1 value1 --param2 /param3:"Test-:-work" 
 			//   /param4=happy -param5 '--=nice=--'
-			for (int i = 0; i < args.Length; i++)
+			for (int i = 0; i < args.Count; i++)
 			{
 				string txt = args[i];
 				// Look for new parameters (-,/ or --) and a

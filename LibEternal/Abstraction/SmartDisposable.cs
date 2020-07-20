@@ -1,5 +1,5 @@
-﻿﻿using JetBrains.Annotations;
- using System;
+﻿using LibEternal.JetBrains.Annotations;
+using System;
 
  namespace LibEternal.Abstraction
 {

@@ -1,7 +1,7 @@
 ﻿extern alias Unity;
+using LibEternal.JetBrains.Annotations;
 using System;
 using System.Reflection;
-using JetBrains.Annotations;
 
 namespace LibEternal.Unity
 {
@@ -13,7 +13,7 @@ namespace LibEternal.Unity
 			//Get the method
 			?.GetMethod("Clear", BindingFlags.Static | BindingFlags.Public);
 #endif
-		internal static void ClearConsole()
+		public static void ClearConsole()
 		{
 #if UNITY_EDITOR
 			ClearMethod?.Invoke(null, null);

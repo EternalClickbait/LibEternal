@@ -1,5 +1,5 @@
 ﻿extern alias Unity;
-using JetBrains.Annotations;
+using LibEternal.JetBrains.Annotations;
 using System;
 using Unity::UnityEngine;
 
