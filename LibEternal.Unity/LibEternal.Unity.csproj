@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DefineConstants>TRACE; UNITY_EDITOR</DefineConstants>
+      <DefineConstants>TRACE</DefineConstants>
     </PropertyGroup>
 
     <ItemGroup>
@@ -16,11 +16,9 @@
     <ItemGroup>
       <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>E:\Programs\Unity Editors\2019.3.13f1\Editor\Data\Managed\UnityEngine\UnityEngine.dll</HintPath>
-        <Aliases>Unity</Aliases>
       </Reference>
       <Reference Include="UnityEngine.CoreModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>E:\Programs\Unity Editors\2019.3.13f1\Editor\Data\Managed\UnityEngine\UnityEngine.CoreModule.dll</HintPath>
-        <Aliases>Unity</Aliases>
       </Reference>
       <Reference Include="UnityEngine.IMGUIModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
         <HintPath>E:\Programs\Unity Editors\2019.3.13f1\Editor\Data\Managed\UnityEngine\UnityEngine.IMGUIModule.dll</HintPath>

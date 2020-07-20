@@ -34,6 +34,7 @@ SOFTWARE. */
 
 using System;
 
+//I embedded this in the source to avoid issues with unity embedding it's own copy with the same namespace.
 namespace LibEternal.JetBrains.Annotations
 {
 	/// <summary>

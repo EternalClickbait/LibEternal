@@ -1,6 +1,5 @@
-﻿extern alias Unity;
-using System.Collections;
-using Unity::UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 namespace LibEternal.Unity
 {
@@ -66,7 +65,7 @@ namespace LibEternal.Unity
 
 		private static void UpdateTime()
 		{
-			Time = Unity::UnityEngine.Time.time;
+			Time = UnityEngine.Time.time;
 		}
 	}
 }

@@ -1,7 +1,6 @@
-﻿extern alias Unity;
-using LibEternal.JetBrains.Annotations;
+﻿using LibEternal.JetBrains.Annotations;
 using System;
-using Unity::UnityEngine;
+using UnityEngine;
 
 namespace LibEternal.Unity
 {
@@ -28,10 +27,8 @@ namespace LibEternal.Unity
 
 	#endregion
 
-		// ReSharper disable InconsistentNaming
 		[UsedImplicitly] public static event Action OnLateUpdate;
 
 		[UsedImplicitly] public static event Action OnLateFixedUpdate;
-		// ReSharper restore InconsistentNaming
 	}
 }

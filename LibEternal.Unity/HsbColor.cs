@@ -1,10 +1,9 @@
-extern alias Unity;
 using System;
-using Unity::UnityEngine;
+using UnityEngine;
 
-// ReSharper disable All
+// ReSharper disable CompareOfFloatsByEqualityOperator
 
-namespace Helper
+namespace LibEternal.Unity
 {
 	[Serializable]
 	public struct HsbColor
@@ -64,7 +63,7 @@ namespace Helper
 					ret.h = (g - b) / dif * 60f + 360f;
 				else
 					ret.h = (g - b) / dif * 60f;
-				if (ret.h < 0) ret.h = ret.h + 360f;
+				if (ret.h < 0) ret.h += 360f;
 			}
 			else
 			{

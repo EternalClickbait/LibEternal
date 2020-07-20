@@ -1,5 +1,4 @@
-extern alias Unity;
-using Unity::UnityEngine;
+using UnityEngine;
 
 namespace LibEternal.Unity
 {
