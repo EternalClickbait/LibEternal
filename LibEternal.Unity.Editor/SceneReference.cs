@@ -6,6 +6,8 @@
 using System;
 using UnityEngine;
 
+//TODO: Split this ASAP
+
 #if UNITY_EDITOR
 using System.Collections.Generic;
 using UnityEditor;
