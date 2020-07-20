@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using LibEternal.JetBrains.Annotations;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace LibEternal.Extensions
@@ -14,6 +15,7 @@ namespace LibEternal.Extensions
 		/// <param name="b">The input byte to format</param>
 		/// <param name="padZeroes">Whether to pad the output with zeroes e.g. "0x01" instead of "0x1"</param>
 		/// <returns>A string representation of the input <paramref name="b" />. E.g. "0x01"</returns>
+		[NotNull]
 		public static string FormatAsHexString(this byte b, bool padZeroes = true)
 		{
 			return "0x" + b.ToString(padZeroes ? "X2" : "X");
@@ -25,7 +27,8 @@ namespace LibEternal.Extensions
 		/// <param name="bytes">The input bytes to format</param>
 		/// <param name="padZeroes">Whether to pad the output with zeroes e.g. "0x01" instead of "0x1"</param>
 		/// <returns>A string representation of the input <paramref name="bytes" />. E.g. "0x01, 0x02, 0x56"</returns>
-		public static string FormatAsHexString(this IEnumerable<byte> bytes, bool padZeroes = true)
+		[NotNull]
+		public static string FormatAsHexString([NotNull] this IEnumerable<byte> bytes, bool padZeroes = true)
 		{
 			//Convert each item to hex
 			IEnumerable<string> hex = bytes.Select(b => FormatAsHexString(b, padZeroes));
@@ -38,7 +41,8 @@ namespace LibEternal.Extensions
 		/// </summary>
 		/// <param name="bytes">The input bytes to format</param>
 		/// <returns>A string representation of the input <paramref name="bytes" />. E.g. "67, 68, 69"</returns>
-		public static string FormatAsString(this IEnumerable<byte> bytes)
+		[NotNull]
+		public static string FormatAsString([NotNull] this IEnumerable<byte> bytes)
 		{
 			//Convert each item to a string
 			IEnumerable<string> str = bytes.Select(b => b.ToString());

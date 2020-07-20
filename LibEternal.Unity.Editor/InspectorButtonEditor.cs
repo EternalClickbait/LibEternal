@@ -4,10 +4,10 @@ using System.Reflection;
 using UnityEditor;
 using UnityEngine;
 
-namespace LibEternal.Unity.Editor.Editor
+namespace LibEternal.Unity.Editor
 {
 	[CustomEditor(typeof(MonoBehaviour), true)]
-	public class InspectorButtonEditor : UnityEditor.Editor
+	public sealed class InspectorButtonEditor : UnityEditor.Editor
 	{
 		//The flags we use to search for methods
 		private const BindingFlags Flags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;

@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace LibEternal.Unity.Editor
+namespace LibEternal.Unity
 {
 	[CreateAssetMenu]
 	public class ExternalLibraryGroup : ScriptableObject

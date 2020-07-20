@@ -14,6 +14,7 @@ namespace LibEternal.Helper
 		/// Returns the current <see cref="IPAddress"/>, or <see langword="null"/> if it cannot be found (no connection, no network adapter etc)
 		/// </summary>
 		/// <returns></returns>
+		[CanBeNull]
 		public static IPAddress GetCurrentIpSafe()
 		{
 			if (!NetworkInterface.GetIsNetworkAvailable()) return null;
@@ -26,6 +27,7 @@ namespace LibEternal.Helper
 		/// Will return the current <see cref="IPAddress"/>, or <see langword="throw"/> if it cannot be found (no connection, no network adapter etc)
 		/// </summary>
 		/// <returns></returns>
+		[NotNull]
 		public static IPAddress GetCurrentIp()
 		{
 			if (!NetworkInterface.GetIsNetworkAvailable()) throw new InvalidOperationException("Not connected to a network");
@@ -37,6 +39,7 @@ namespace LibEternal.Helper
 		/// Returns a new <see cref="IPEndPoint"/> set up to accept connections from any <see cref="IPAddress"/> on any port
 		/// </summary>
 		/// <returns></returns>
+		[NotNull]
 		public static IPEndPoint GetReceiveAllEndpoint()
 		{
 			return new IPEndPoint(IPAddress.Any, 0);

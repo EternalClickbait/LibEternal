@@ -13,7 +13,7 @@ namespace LibEternal.Extensions
         /// <param name="random">The given random instance</param>
         /// <param name="min">The inclusive minimum bound</param>
         /// <param name="max">The exclusive maximum bound.  Must be greater than min</param>
-        public static long NextLong(this Random random, long min, long max)
+        public static long NextLong([NotNull] this Random random, long min, long max)
         {
             if (max <= min)
                 throw new ArgumentOutOfRangeException(nameof(max), "Max must be > min!");
@@ -41,7 +41,7 @@ namespace LibEternal.Extensions
         /// </summary>
         /// <param name="random">The given random instance</param>
         /// <param name="max">The exclusive maximum bound.  Must be greater than 0</param>
-        public static long NextLong(this Random random, long max)
+        public static long NextLong([NotNull] this Random random, long max)
         {
             return random.NextLong(0, max);
         }
@@ -51,7 +51,7 @@ namespace LibEternal.Extensions
         /// random.Next())
         /// </summary>
         /// <param name="random">The given random instance</param>
-        public static long NextLong(this Random random)
+        public static long NextLong([NotNull] this Random random)
         {
             return random.NextLong(long.MinValue, long.MaxValue);
         }

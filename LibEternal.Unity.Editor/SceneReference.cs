@@ -3,6 +3,7 @@
 // ReSharper disable StringLiteralTypo
 // ReSharper disable CommentTypo
 
+using LibEternal.JetBrains.Annotations;
 using System;
 using UnityEngine;
 
@@ -85,10 +86,11 @@ namespace LibEternal.Unity.Editor
 #endif
 		}
 
-		public static implicit operator string(SceneReference sceneReference)
+		public static implicit operator string([NotNull] SceneReference sceneReference)
 		{
 			return sceneReference.ScenePath;
 		}
+
 #if UNITY_EDITOR
 		// What we use in editor to select the scene
 		[SerializeField] private Object sceneAsset = null;

@@ -1,3 +1,4 @@
+using LibEternal.JetBrains.Annotations;
 using System;
 using UnityEngine;
 
@@ -142,6 +143,7 @@ namespace LibEternal.Unity
 			return ToColor(this);
 		}
 
+		[NotNull]
 		public override string ToString()
 		{
 			return "H:" + h + " S:" + s + " B:" + b;

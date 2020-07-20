@@ -1,11 +1,12 @@
 ﻿extern alias Unity;
 using LibEternal.Extensions;
 using LibEternal.Helper;
+using LibEternal.JetBrains.Annotations;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
 
-namespace LibEternal.Unity.Editor.Editor
+namespace LibEternal.Unity.Editor
 {
 	[CustomPropertyDrawer(typeof(FileInfoWrapper), true)]
 	public class FileInfoWrapperDrawer : PropertyDrawer
@@ -39,6 +40,7 @@ namespace LibEternal.Unity.Editor.Editor
 		};
 
 		//This doesn't work at the moment, but it's here for future compatibility
+		[NotNull]
 		private static Texture2D GetFolderButtonTexture()
 		{
 			Texture2D tex = new Texture2D(10, 10);
@@ -53,7 +55,7 @@ namespace LibEternal.Unity.Editor.Editor
 			return tex;
 		}
 
-		public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+		public override void OnGUI(Rect position, [NotNull] SerializedProperty property, GUIContent label)
 		{
 			EditorGUI.BeginProperty(position, label, property);
 			position = EditorGUI.PrefixLabel(position, GUIUtility.GetControlID(FocusType.Passive), label);
@@ -68,7 +70,7 @@ namespace LibEternal.Unity.Editor.Editor
 			Rect fullPathRet = new Rect(position.x, fileNameRect.yMax, position.width, position.height / 2);
 
 			//FINALLY!!! I love that I don't have to manually update this each time something changes
-			FileInfoWrapper targetWrapper = property.GetInPath<FileInfoWrapper>();
+			FileInfoWrapper targetWrapper = property.GetSelectedFromPath<FileInfoWrapper>();
 
 			//Get the file name
 			string displayedFileName;

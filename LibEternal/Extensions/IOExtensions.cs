@@ -16,7 +16,7 @@ namespace LibEternal.Extensions
 		/// <param name="fileName"></param>
 		/// <returns></returns>
 		[Pure]
-		public static bool IsValidFilename(string fileName)
+		public static bool IsValidFilename([CanBeNull] string fileName)
 		{
 			if (string.IsNullOrWhiteSpace(fileName)) return false;
 			//From https://stackoverflow.com/a/62855/

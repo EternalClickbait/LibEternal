@@ -14,7 +14,7 @@ namespace LibEternal.Callbacks.Generic
 		private readonly List<Func<T1, TReturn>> callbacks;
 
 		/// <inheritdoc cref="SafeFunc{TReturn}(List{Func{TReturn}})" />
-		public SafeFunc(List<Func<T1, TReturn>> callbacks = null)
+		public SafeFunc([CanBeNull] List<Func<T1, TReturn>> callbacks = null)
 		{
 			this.callbacks = callbacks ?? new List<Func<T1, TReturn>>();
 		}

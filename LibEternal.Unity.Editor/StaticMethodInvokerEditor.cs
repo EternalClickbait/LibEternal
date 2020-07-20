@@ -7,10 +7,10 @@ using UnityEditor;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
-namespace LibEternal.Unity.Editor.Editor
+namespace LibEternal.Unity.Editor
 {
 	[CustomEditor(typeof(StaticMethodInvoker))]
-	public class StaticMethodInvokerEditor : UnityEditor.Editor
+	public sealed class StaticMethodInvokerEditor : UnityEditor.Editor
 	{
 		private const BindingFlags Flags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 

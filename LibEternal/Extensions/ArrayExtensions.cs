@@ -42,6 +42,7 @@ namespace LibEternal.Extensions
 		/// </summary>
 		/// <param name="str">The input <see cref="string"/> to encode</param>
 		/// <returns></returns>
+		[NotNull]
 		public static byte[] ToUtf8(this string str)
 		{
 			return Encoding.UTF8.GetBytes(str);
@@ -52,6 +53,7 @@ namespace LibEternal.Extensions
 		/// </summary>
 		/// <param name="b">The input <see cref="System.Array"/> to decode</param>
 		/// <returns></returns>
+		[NotNull]
 		public static string FromUtf8(this byte[] b)
 		{
 			return Encoding.UTF8.GetString(b);

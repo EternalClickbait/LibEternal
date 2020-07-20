@@ -2,7 +2,7 @@
 using LibEternal.JetBrains.Annotations;
 using System;
 
-namespace LibEternal.Unity.Editor
+namespace LibEternal.Unity
 {
 	/// <summary>
 	///     An attribute used to mark methods as callable from the unity inspector window

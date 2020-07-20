@@ -11,6 +11,9 @@ namespace LibEternal.Unity.Editor
 			//Get the method
 			?.GetMethod("Clear", BindingFlags.Static | BindingFlags.Public);
 
+		/// <summary>
+		///     Clears the unity console. Exactly the same as clicking the 'clear' button in the editor
+		/// </summary>
 		public static void ClearConsole()
 		{
 			ClearMethod?.Invoke(null, null);

@@ -12,7 +12,7 @@ namespace LibEternal.Callbacks.Generic
 		private readonly List<Action<T1>> callbacks;
 
 		/// <inheritdoc cref="SafeAction(List{Action})" />
-		public SafeAction(List<Action<T1>> callbacks = null)
+		public SafeAction([CanBeNull] List<Action<T1>> callbacks = null)
 		{
 			this.callbacks = callbacks ?? new List<Action<T1>>();
 		}
@@ -25,6 +25,7 @@ namespace LibEternal.Callbacks.Generic
 		}
 
 		/// <inheritdoc cref="SafeAction.InvokeSafe" />
+		[NotNull]
 		public List<Exception> InvokeSafe(T1 param1)
 		{
 			List<Exception> exceptions = new List<Exception>();

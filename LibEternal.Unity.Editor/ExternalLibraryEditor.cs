@@ -1,4 +1,5 @@
 ﻿extern alias Unity;
+using LibEternal.JetBrains.Annotations;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -13,10 +14,10 @@ using Debug = UnityEngine.Debug;
 // ReSharper disable HeuristicUnreachableCode
 #pragma warning disable 162
 
-namespace LibEternal.Unity.Editor.Editor
+namespace LibEternal.Unity.Editor
 {
 	[CustomEditor(typeof(ExternalLibraryGroup))]
-	public class ExternalLibraryEditor : UnityEditor.Editor
+	public sealed class ExternalLibraryEditor : UnityEditor.Editor
 	{
 		/// <summary>
 		///     Set this to true to print extended information such as when a library is being copied/imported
@@ -191,6 +192,7 @@ namespace LibEternal.Unity.Editor.Editor
 		/// </summary>
 		/// <returns></returns>
 		// ReSharper disable once ReturnTypeCanBeEnumerable.Local
+		[NotNull]
 		private static ExternalLibraryGroup[] GetAllInstances()
 		{
 			string[]

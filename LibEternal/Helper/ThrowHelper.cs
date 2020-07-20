@@ -13,7 +13,7 @@ namespace LibEternal.Helper
 					$"Value {val} was out of valid range {min} to {max}");
 		}
 
-		public static void CheckRange<T>(T val, T min, T max) where T : IComparable<T>
+		public static void CheckRange<T>([NotNull] T val, T min, T max) where T : IComparable<T>
 		{
 			//If val goes before min or after max(when in ascending order)
 			if (val.CompareTo(min) < 0 || val.CompareTo(max) > 0)

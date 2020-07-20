@@ -15,7 +15,7 @@ namespace LibEternal.Extensions
 		/// <param name="process">The process whose exit to wait for</param>
 		/// <param name="cancellationToken"></param>
 		/// <returns>A completed task once the process has exited</returns>
-		public static async Task WaitForExitAsync(this Process process, CancellationToken cancellationToken = default)
+		public static async Task WaitForExitAsync([NotNull] this Process process, CancellationToken cancellationToken = default)
 		{
 			TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 

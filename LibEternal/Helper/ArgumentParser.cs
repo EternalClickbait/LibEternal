@@ -25,7 +25,7 @@ namespace LibEternal.Helper
 		}
 
 		// Constructor
-		public ArgumentParser(IReadOnlyList<string> args)
+		public ArgumentParser([NotNull] IReadOnlyList<string> args)
 		{
 			parameters = new StringDictionary();
 			Regex splitter = new Regex(@"^-{1,2}|^/|=|:",
@@ -110,7 +110,7 @@ namespace LibEternal.Helper
 
 		// Retrieve a parameter value if it exists 
 		// (overriding C# indexer property)
-		public string this[string param] => parameters[param];
+		public string this[[NotNull] string param] => parameters[param];
 
 		/// <summary>
 		///     Retrieve a parameter value if it exists , otherwise the given value
@@ -119,7 +119,7 @@ namespace LibEternal.Helper
 		/// <param name="defaultValue">The default value</param>
 		/// <returns>A parameter value or the given default value</returns>
 		[Pure]
-		public string GetOrDefault(string key, string defaultValue)
+		public string GetOrDefault([NotNull] string key, string defaultValue)
 		{
 			return parameters.ContainsKey(key) ? parameters[key] : defaultValue;
 		}

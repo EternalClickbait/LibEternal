@@ -1,10 +1,12 @@
-﻿using System;
+﻿using LibEternal.JetBrains.Annotations;
+using System;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEditor;
 
-namespace LibEternal.Unity.Editor.Editor
+namespace LibEternal.Unity.Editor
 {
+	[PublicAPI]
 	public static class SerializedPropertyExtensions
 	{
 		/// <summary>
@@ -18,7 +20,7 @@ namespace LibEternal.Unity.Editor.Editor
 		/// <param name="property"></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static T GetInPath<T>(this SerializedProperty property)
+		public static T GetSelectedFromPath<T>([NotNull] this SerializedProperty property)
 		{
 			//The maximum depth allowed for an object. Objects deeper than this will throw an exception
 			//This is mainly here to avoid an infinite loop because of the while loop

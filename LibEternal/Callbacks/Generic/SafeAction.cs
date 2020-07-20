@@ -19,7 +19,7 @@ namespace LibEternal.Callbacks.Generic
 		///     The constructor to instantiate a new <see cref="SafeAction" />
 		/// </summary>
 		/// <param name="callbacks">An optional <see cref="List{T}" /> of <see cref="Action" />s to use as a base</param>
-		public SafeAction(List<Action> callbacks = null)
+		public SafeAction([CanBeNull] List<Action> callbacks = null)
 		{
 			this.callbacks = callbacks ?? new List<Action>();
 		}
@@ -37,6 +37,7 @@ namespace LibEternal.Callbacks.Generic
 		///     Invokes the <see cref="callbacks" />, catching and returning all thrown <see cref="Exception" />s
 		/// </summary>
 		/// <returns>A <see cref="List{T}" /> of <see cref="Exception" />s that were thrown during invocation</returns>
+		[NotNull]
 		public List<Exception> InvokeSafe()
 		{
 			List<Exception> exceptions = new List<Exception>();

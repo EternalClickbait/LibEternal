@@ -19,7 +19,7 @@ namespace LibEternal.Callbacks.Generic
 		///     The constructor to instantiate a new <see cref="SafeFunc{TReturn}" />
 		/// </summary>
 		/// <param name="callbacks">An optional <see cref="List{T}" /> of <see cref="Func{TReturn}" />s to use as a base</param>
-		public SafeFunc(List<Func<TReturn>> callbacks = null)
+		public SafeFunc([CanBeNull] List<Func<TReturn>> callbacks = null)
 		{	
 			this.callbacks = callbacks ?? new List<Func<TReturn>>();
 		}

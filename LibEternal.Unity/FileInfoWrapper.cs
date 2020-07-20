@@ -1,9 +1,10 @@
 ﻿using LibEternal.Helper;
+using LibEternal.JetBrains.Annotations;
 using System;
 using System.IO;
 using UnityEngine;
 
-namespace LibEternal.Unity.Editor
+namespace LibEternal.Unity
 {
 	/// <summary>
 	///     A wrapper for displaying a <see cref="System.IO.FileInfo" /> in a unity inspector
@@ -19,6 +20,7 @@ namespace LibEternal.Unity.Editor
 			CachedFileInfo = new Cached<FileInfo>(GetUpdatedFileInfo, null);
 		}
 
+		[NotNull]
 		private FileInfo GetUpdatedFileInfo() => new FileInfo(filePath);
 	}
 }
