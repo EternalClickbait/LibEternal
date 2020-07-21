@@ -1,5 +1,4 @@
-﻿extern alias Unity;
-using LibEternal.Extensions;
+﻿using LibEternal.Extensions;
 using LibEternal.Helper;
 using LibEternal.JetBrains.Annotations;
 using System.IO;

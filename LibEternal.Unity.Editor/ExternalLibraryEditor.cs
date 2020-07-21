@@ -1,5 +1,4 @@
-﻿extern alias Unity;
-using LibEternal.JetBrains.Annotations;
+﻿using LibEternal.JetBrains.Annotations;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -36,6 +35,7 @@ namespace LibEternal.Unity.Editor
 			EditorUtility.SetDirty(target);
 		}
 
+		//TODO: Should make a function to only do this for 1 instance
 		/// <summary>
 		///     Compiles all external libraries and imports them
 		/// </summary>
@@ -153,7 +153,7 @@ namespace LibEternal.Unity.Editor
 					for (int i = 0; i < libraryGroup.libraries.Length; i++)
 					{
 						ExternalLibraryGroup.CompiledLibrary compiledLibrary = libraryGroup.libraries[i];
-
+			
 						//Checks to ensure nothing errors out
 						if (!IsValidFilename(compiledLibrary.sourceLocation.filePath))
 						{
@@ -173,10 +173,9 @@ namespace LibEternal.Unity.Editor
 						File.Copy(compiledLibrary.sourceLocation.filePath, compiledLibrary.assetDestination.filePath, true);
 
 						//Can't import a group at a time, so import as we go
-						if (PrintExtendedInfo)
-							Debug.Log($"\t\tImporting binary asset at {compiledLibrary.assetDestination}");
 						AssetDatabase.ImportAsset(compiledLibrary.assetDestination.filePath,
 							ImportAssetOptions.ForceUpdate | ImportAssetOptions.DontDownloadFromCacheServer);
+						Debug.Log($"\t\tImported binary \"{compiledLibrary.assetDestination.CachedFileInfo.Value.Name}\"");
 					}
 
 					if (PrintExtendedInfo)

@@ -4,7 +4,7 @@ using UnityEngine;
 namespace LibEternal.Unity
 {
 	[CreateAssetMenu]
-	public class ExternalLibraryGroup : ScriptableObject
+	public sealed class ExternalLibraryGroup : ScriptableObject
 	{
 		[Serializable]
 		public class CompiledLibrary
