@@ -5,6 +5,10 @@
         <LangVersion>8</LangVersion>
     </PropertyGroup>
 
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DefineConstants>TRACE</DefineConstants>
+    </PropertyGroup>
+
     <ItemGroup>
       <ProjectReference Include="..\LibEternal.Unity\LibEternal.Unity.csproj" />
     </ItemGroup>
