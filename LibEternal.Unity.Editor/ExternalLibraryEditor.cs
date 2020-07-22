@@ -48,7 +48,7 @@ namespace LibEternal.Unity.Editor
 			ExternalLibraryGroup[] allInstances = GetAllInstances();
 			if (allInstances is null || allInstances.Length == 0)
 			{
-				Debug.LogWarning("No libraries found");
+				Debug.LogWarning("No library groups found");
 				return;
 			}
 

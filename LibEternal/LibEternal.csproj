@@ -11,6 +11,13 @@
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
       <DefineConstants>TRACE</DefineConstants>
+      <DebugType>full</DebugType>
+      <DocumentationFile>bin\Debug\LibEternal.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DefineConstants />
+      <DocumentationFile>bin\Release\LibEternal.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>

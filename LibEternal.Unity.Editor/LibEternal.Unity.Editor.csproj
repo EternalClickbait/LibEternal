@@ -7,6 +7,13 @@
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
       <DefineConstants>TRACE</DefineConstants>
+      <DebugType>full</DebugType>
+      <DocumentationFile>bin\Debug\LibEternal.Unity.Editor.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DefineConstants />
+      <DocumentationFile>bin\Release\LibEternal.Unity.Editor.xml</DocumentationFile>
     </PropertyGroup>
 
     <ItemGroup>
