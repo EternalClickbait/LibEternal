@@ -15,14 +15,18 @@ using Debug = UnityEngine.Debug;
 
 namespace LibEternal.Unity.Editor
 {
+	/// <summary>
+	/// An editor class for an <see cref="ExternalLibraryGroup"/>
+	/// </summary>
 	[CustomEditor(typeof(ExternalLibraryGroup))]
-	public sealed class ExternalLibraryEditor : UnityEditor.Editor
+	public sealed class ExternalLibraryGroupEditor : UnityEditor.Editor
 	{
 		/// <summary>
 		///     Set this to true to print extended information such as when a library is being copied/imported
 		/// </summary>
 		private const bool PrintExtendedInfo = false;
 
+		/// <inheritdoc />
 		public override void OnInspectorGUI()
 		{
 			//This draws the FileInfoWrappers using the property drawer
