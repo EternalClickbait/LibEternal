@@ -23,7 +23,6 @@ namespace LibEternal.Unity
 		[NotNull]
 		private FileInfo GetUpdatedFileInfo() => new FileInfo(filePath);
 
-		//TODO: Add docs
 		[NotNull]
 		public override string ToString()
 		{

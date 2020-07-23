@@ -1,4 +1,5 @@
 ﻿using LibEternal.JetBrains.Annotations;
+using LibEternal.Unity.Editor.Extensions;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -16,7 +17,7 @@ using Debug = UnityEngine.Debug;
 namespace LibEternal.Unity.Editor
 {
 	/// <summary>
-	/// An editor class for an <see cref="ExternalLibraryGroup"/>
+	///     An editor class for an <see cref="ExternalLibraryGroup" />
 	/// </summary>
 	[CustomEditor(typeof(ExternalLibraryGroup))]
 	public sealed class ExternalLibraryGroupEditor : UnityEditor.Editor
@@ -49,7 +50,7 @@ namespace LibEternal.Unity.Editor
 		{
 			Debug.Log("Recompiling all external libraries");
 
-			ExternalLibraryGroup[] allInstances = GetAllInstances();
+			ExternalLibraryGroup[] allInstances = ScriptableObjectExtensions.GetAllInstances<ExternalLibraryGroup>();
 			if (allInstances is null || allInstances.Length == 0)
 			{
 				Debug.LogWarning("No library groups found");
@@ -102,7 +103,7 @@ namespace LibEternal.Unity.Editor
 									// FileName = "msbuild", Arguments = $"\"{library.filePath}\" -m",
 
 									// ReSharper disable once CommentTypo
-									//If for some reason msbuild doesn't work, use 'dotnet build' instead. '/nologo' just reduces the excess output. '--verbosity q' makes it only print the warning/errors
+									//If for some reason msbuild doesn't work, use 'dotnet build' instead. '-nologo' just reduces the excess output. '--verbosity q' makes it only print the warning/errors
 									FileName = "dotnet", Arguments = $"build \"{fileInfo.FullName}\" --verbosity q -nologo",
 
 									//These let us read the process output as a stream
@@ -158,7 +159,7 @@ namespace LibEternal.Unity.Editor
 					for (int i = 0; i < libraryGroup.libraries.Length; i++)
 					{
 						ExternalLibraryGroup.CompiledLibrary compiledLibrary = libraryGroup.libraries[i];
-			
+
 						//Checks to ensure nothing errors out
 						if (!IsValidFilename(compiledLibrary.sourceLocation.filePath))
 						{
@@ -189,26 +190,6 @@ namespace LibEternal.Unity.Editor
 			}
 
 			Debug.Log("Finished compiling all library groups");
-		}
-
-		/// <summary>
-		///     Gets an array of all the external library compiler assets
-		/// </summary>
-		/// <returns></returns>
-		// ReSharper disable once ReturnTypeCanBeEnumerable.Local
-		[NotNull]
-		private static ExternalLibraryGroup[] GetAllInstances()
-		{
-			string[]
-				guids = AssetDatabase.FindAssets("t:" + typeof(ExternalLibraryGroup).Name); //FindAssets uses tags, check documentation for more info
-			ExternalLibraryGroup[] array = new ExternalLibraryGroup[guids.Length];
-			for (int i = 0; i < guids.Length; i++) //probably could get optimized 
-			{
-				string path = AssetDatabase.GUIDToAssetPath(guids[i]);
-				array[i] = AssetDatabase.LoadAssetAtPath<ExternalLibraryGroup>(path);
-			}
-
-			return array;
 		}
 	}
 }

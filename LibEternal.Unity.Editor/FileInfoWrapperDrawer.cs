@@ -1,12 +1,16 @@
 ﻿using LibEternal.Extensions;
 using LibEternal.Helper;
 using LibEternal.JetBrains.Annotations;
+using LibEternal.Unity.Editor.Extensions;
 using System.IO;
 using UnityEditor;
 using UnityEngine;
 
 namespace LibEternal.Unity.Editor
 {
+	/// <summary>
+	///     A custom drawer for a <see cref="FileInfoWrapper" />
+	/// </summary>
 	[CustomPropertyDrawer(typeof(FileInfoWrapper), true)]
 	public class FileInfoWrapperDrawer : PropertyDrawer
 	{
@@ -38,11 +42,14 @@ namespace LibEternal.Unity.Editor
 			}
 		};
 
-		//This doesn't work at the moment, but it's here for future compatibility
+		//This doesn't work at the moment (changing the texture doesn't show in the inspector), but it's here for future compatibility
+		/// <summary>
+		///     Creates a <see cref="Texture2D" /> that should be used for the folder select button texture. Currently this is useless because Unity won't display the texture at all.
+		/// </summary>
 		[NotNull]
 		private static Texture2D GetFolderButtonTexture()
 		{
-			Texture2D tex = new Texture2D(10, 10);
+			Texture2D tex = new Texture2D(20, 20);
 
 			for (int x = 0; x < tex.width; x++)
 			{
@@ -54,6 +61,10 @@ namespace LibEternal.Unity.Editor
 			return tex;
 		}
 
+		/// <inheritdoc />
+		/// <summary>
+		///     Draws this <see cref="FileInfoWrapper" /> in the inspector
+		/// </summary>
 		public override void OnGUI(Rect position, [NotNull] SerializedProperty property, GUIContent label)
 		{
 			EditorGUI.BeginProperty(position, label, property);
@@ -125,6 +136,10 @@ namespace LibEternal.Unity.Editor
 			EditorGUI.EndProperty();
 		}
 
+		/// <inheritdoc />
+		/// <summary>
+		///     Because this takes up 2 lines, returns double the base value
+		/// </summary>
 		public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
 		{
 			//Tell the inspector this property uses 2 lines

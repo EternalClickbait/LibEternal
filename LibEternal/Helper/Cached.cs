@@ -3,9 +3,46 @@ using System;
 
 namespace LibEternal.Helper
 {
+	/// <summary>
+	/// A class that 
+	/// </summary>
+	/// <typeparam name="T"></typeparam>
 	[PublicAPI]
 	public class Cached<T>
 	{
+		private readonly bool allowNull;
+
+		private readonly Func<T> updateDelegate;
+		private T value = default;
+
+		/// <summary>
+		///     A constructor to instantiate a new <see cref="Cached{T}" /> object
+		/// </summary>
+		/// <param name="updateDelegate">A <see cref="Delegate" /> to use to obtain the updated value</param>
+		public Cached(Func<T> updateDelegate)
+		{
+			this.updateDelegate = updateDelegate;
+			UpdateValue();
+		}
+
+		/// <summary>
+		///     <inheritdoc cref="Cached{T}(Func{T})" />
+		/// </summary>
+		/// <param name="updateDelegate">
+		///     <inheritdoc cref="Cached{T}(Func{T})" />
+		/// </param>
+		/// <param name="initialValue">A value to use as the initial value of the cached object</param>
+		/// <param name="allowNull">If null values are allowed. Will have no effect if <typeparamref name="T"/> is a value type</param>
+		public Cached(Func<T> updateDelegate, T initialValue, bool allowNull = false)
+		{
+			this.updateDelegate = updateDelegate;
+			value = initialValue;
+			this.allowNull = allowNull;
+		}
+
+		/// <summary>
+		///     Gets the cached value of this instance
+		/// </summary>
 		public T Value
 		{
 			get
@@ -18,29 +55,19 @@ namespace LibEternal.Helper
 			}
 		}
 
+		/// <summary>
+		///     Updates the cached value, and returns it.
+		/// </summary>
+		/// <returns>Returns an up-to-date value</returns>
 		public T UpdateAndGetValue()
 		{
 			UpdateValue();
 			return Value;
 		}
 
-		private readonly Func<T> updateDelegate;
-		private T value = default;
-		private readonly bool allowNull;
-
-		public Cached(Func<T> updateDelegate)
-		{
-			this.updateDelegate = updateDelegate;
-			UpdateValue();
-		}
-
-		public Cached(Func<T> updateDelegate, T initialValue, bool allowNull = false)
-		{
-			this.updateDelegate = updateDelegate;
-			value = initialValue;
-			this.allowNull = allowNull;
-		}
-
+		/// <summary>
+		/// Updates the stored value
+		/// </summary>
 		public void UpdateValue()
 		{
 			value = updateDelegate();
