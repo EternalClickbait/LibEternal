@@ -120,20 +120,21 @@ namespace LibEternal.Unity.Editor
 							//Returns whichever completes first
 							Task first = await Task.WhenAny(buildTask, delayTask);
 
+							string output = process.StandardOutput.ReadToEnd();
 							//Force kill if it took too long (the delay task returned first)
 							if (first != buildTask)
 							{
-								Debug.LogError($"\t\tError: Build took too long ({stopwatch.Elapsed:m\\:ss}), force killing");
+								Debug.LogError($"\t\tError: Build took too long ({stopwatch.Elapsed:m\\:ss}), force killing. Output was:\n{output}");
 								process.Kill();
 								process.Dispose();
 							}
 							else
 							{
 								//Trim the newlines so the user can see if the build failed without expanding the debug message
-								string output = process.StandardOutput.ReadToEnd().TrimStart('\r', '\n');
+								string trimmedOutput = output.TrimStart('\r', '\n');
 								//This formats the elapsed time as <minutes (short)> minutes and <seconds (long)>.<decimal seconds (short> seconds
 								//e.g. 0min 5.325s => "0 minutes and 5.32 seconds"
-								Debug.Log($"\t\tBuilt {fileInfo.Name} in {stopwatch.Elapsed:m\\:ss}. Output was: {output}");
+								Debug.Log($"\t\tBuilt {fileInfo.Name} in {stopwatch.Elapsed:m\\:ss}. Output was: {trimmedOutput}");
 								process.Dispose();
 							}
 						}
