@@ -11,7 +11,7 @@ namespace LibEternal.Helper
 	public static class NetworkHelper
 	{
 		/// <summary>
-		/// Returns the current <see cref="IPAddress"/>, or <see langword="null"/> if it cannot be found (no connection, no network adapter etc)
+		///     Returns the current <see cref="IPAddress" />, or <see langword="null" /> if it cannot be found (no connection, no network adapter etc)
 		/// </summary>
 		/// <returns></returns>
 		[CanBeNull]
@@ -24,7 +24,7 @@ namespace LibEternal.Helper
 		}
 
 		/// <summary>
-		/// Will return the current <see cref="IPAddress"/>, or <see langword="throw"/> if it cannot be found (no connection, no network adapter etc)
+		///     Will return the current <see cref="IPAddress" />, or <see langword="throw" /> if it cannot be found (no connection, no network adapter etc)
 		/// </summary>
 		/// <returns></returns>
 		[NotNull]
@@ -36,7 +36,7 @@ namespace LibEternal.Helper
 		}
 
 		/// <summary>
-		/// Returns a new <see cref="IPEndPoint"/> set up to accept connections from any <see cref="IPAddress"/> on any port
+		///     Returns a new <see cref="IPEndPoint" /> set up to accept connections from any <see cref="IPAddress" /> on any port
 		/// </summary>
 		/// <returns></returns>
 		[NotNull]

@@ -38,6 +38,11 @@ namespace LibEternal.Unity
 			// ReSharper disable once IteratorNeverReturns
 		}
 
+		private static void UpdateTime()
+		{
+			Time = UnityEngine.Time.time;
+		}
+
 	#region Messages
 
 		//Update the time here to ensure that time is always as accurate as possible
@@ -62,10 +67,5 @@ namespace LibEternal.Unity
 		}
 
 	#endregion
-
-		private static void UpdateTime()
-		{
-			Time = UnityEngine.Time.time;
-		}
 	}
 }

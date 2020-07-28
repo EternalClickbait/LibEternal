@@ -4,7 +4,7 @@ using System;
 namespace LibEternal.Helper
 {
 	/// <summary>
-	/// A class that 
+	///     A class used for caching a value and easily updating it.
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
 	[PublicAPI]
@@ -32,7 +32,7 @@ namespace LibEternal.Helper
 		///     <inheritdoc cref="Cached{T}(Func{T})" />
 		/// </param>
 		/// <param name="initialValue">A value to use as the initial value of the cached object</param>
-		/// <param name="allowNull">If null values are allowed. Will have no effect if <typeparamref name="T"/> is a value type</param>
+		/// <param name="allowNull">If null values are allowed. Will have no effect if <typeparamref name="T" /> is a value type</param>
 		public Cached(Func<T> updateDelegate, T initialValue, bool allowNull = false)
 		{
 			this.updateDelegate = updateDelegate;
@@ -66,7 +66,7 @@ namespace LibEternal.Helper
 		}
 
 		/// <summary>
-		/// Updates the stored value
+		///     Updates the stored value
 		/// </summary>
 		public void UpdateValue()
 		{

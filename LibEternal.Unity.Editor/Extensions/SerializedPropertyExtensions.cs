@@ -7,7 +7,7 @@ using UnityEditor;
 namespace LibEternal.Unity.Editor.Extensions
 {
 	/// <summary>
-	/// A class of extensions for a <see cref="SerializedProperty"/>
+	///     A class of extensions for a <see cref="SerializedProperty" />
 	/// </summary>
 	[PublicAPI]
 	public static class SerializedPropertyExtensions

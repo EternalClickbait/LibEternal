@@ -8,14 +8,14 @@ namespace LibEternal.Extensions
 	public static class ArrayExtensions
 	{
 		/// <summary>
-		/// Returns if the two input arrays have the same contents
+		///     Returns if the two input arrays have the same contents
 		/// </summary>
 		/// <param name="array1">The first array</param>
 		/// <param name="array2">The second array</param>
-		/// <param name="comparer">The <see cref="IEqualityComparer{T}"/></param>
+		/// <param name="comparer">The <see cref="IEqualityComparer{T}" /></param>
 		/// <typeparam name="T"></typeparam>
 		/// <returns></returns>
-		public static bool ContentsEqual<T>(this T[] array1, T[] array2, IEqualityComparer<T> comparer = null)
+		public static bool ContentsEqual<T>([ItemCanBeNull] this T[] array1, [ItemCanBeNull] T[] array2, IEqualityComparer<T> comparer = null)
 		{
 			if (ReferenceEquals(array1, array2))
 				return true;
@@ -28,33 +28,34 @@ namespace LibEternal.Extensions
 
 			if (comparer == null)
 				comparer = EqualityComparer<T>.Default;
-			
+
 			for (int i = 0; i < array1.Length; i++)
-			{
-				if (!comparer.Equals(array1[i], array2[i])) return false;
-			}
+				if (!comparer.Equals(array1[i], array2[i]))
+					return false;
 
 			return true;
 		}
 
 		/// <summary>
-		/// Encodes a <see cref="string"/>  using <see cref="Encoding.UTF8"/> <see cref="Encoding"/>, turning it into a <see cref="byte"/> <see cref="System.Array"/>
+		///     Encodes a <see cref="string" />  using <see cref="Encoding.UTF8" /> <see cref="Encoding" />, turning it into a <see cref="byte" />
+		///     <see cref="System.Array" />
 		/// </summary>
-		/// <param name="str">The input <see cref="string"/> to encode</param>
+		/// <param name="str">The input <see cref="string" /> to encode</param>
 		/// <returns></returns>
 		[NotNull]
-		public static byte[] ToUtf8(this string str)
+		public static byte[] ToUtf8([NotNull] this string str)
 		{
 			return Encoding.UTF8.GetBytes(str);
 		}
 
 		/// <summary>
-		/// Decodes the <see cref="byte"/>s in a <see cref="byte"/> array and converts them to a string, using <see cref="Encoding.UTF8"/> <see cref="Encoding"/>.
+		///     Decodes the <see cref="byte" />s in a <see cref="byte" /> array and converts them to a string, using <see cref="Encoding.UTF8" />
+		///     <see cref="Encoding" />.
 		/// </summary>
-		/// <param name="b">The input <see cref="System.Array"/> to decode</param>
+		/// <param name="b">The input <see cref="System.Array" /> to decode</param>
 		/// <returns></returns>
 		[NotNull]
-		public static string FromUtf8(this byte[] b)
+		public static string FromUtf8([NotNull] this byte[] b)
 		{
 			return Encoding.UTF8.GetString(b);
 		}

@@ -44,7 +44,7 @@ namespace LibEternal.Callbacks.Generic
 
 			for (int i = 0; i < callbacks.Count; i++)
 				try
-				{	
+				{
 					callbacks[i]?.Invoke();
 				}
 				//Called if there's an exception in one of the callbacks

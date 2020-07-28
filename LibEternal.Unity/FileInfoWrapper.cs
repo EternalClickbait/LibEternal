@@ -21,7 +21,10 @@ namespace LibEternal.Unity
 		}
 
 		[NotNull]
-		private FileInfo GetUpdatedFileInfo() => new FileInfo(filePath);
+		private FileInfo GetUpdatedFileInfo()
+		{
+			return new FileInfo(filePath);
+		}
 
 		[NotNull]
 		public override string ToString()

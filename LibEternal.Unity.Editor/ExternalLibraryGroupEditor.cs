@@ -1,5 +1,4 @@
-﻿using LibEternal.JetBrains.Annotations;
-using LibEternal.Unity.Editor.Extensions;
+﻿using LibEternal.Unity.Editor.Extensions;
 using System;
 using System.Diagnostics;
 using System.IO;

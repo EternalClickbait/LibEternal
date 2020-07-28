@@ -15,7 +15,7 @@ namespace LibEternal.Unity
 		public static void ForceSingleton<T>() where T : Component
 		{
 			T[] instances = Object.FindObjectsOfType<T>();
-			if(instances.Length != 0)
+			if (instances.Length != 0)
 				Debug.LogWarning($"Instances of {typeof(T).Name} detected. Destroying...");
 			for (int i = 0; i < instances.Length; i++)
 			{
@@ -26,7 +26,5 @@ namespace LibEternal.Unity
 				new GameObject(typeof(T).Name)
 					.AddComponent<T>());
 		}
-		
-		
 	}
 }

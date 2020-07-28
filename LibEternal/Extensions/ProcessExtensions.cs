@@ -10,7 +10,7 @@ namespace LibEternal.Extensions
 	public static class ProcessExtensions
 	{
 		/// <summary>
-		/// Returns an asynchronous task that returns once a process has exited
+		///     Returns an asynchronous task that returns once a process has exited
 		/// </summary>
 		/// <param name="process">The process whose exit to wait for</param>
 		/// <param name="cancellationToken"></param>

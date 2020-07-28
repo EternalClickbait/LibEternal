@@ -20,7 +20,7 @@ namespace LibEternal.Callbacks.Generic
 		/// </summary>
 		/// <param name="callbacks">An optional <see cref="List{T}" /> of <see cref="Func{TReturn}" />s to use as a base</param>
 		public SafeFunc([CanBeNull] List<Func<TReturn>> callbacks = null)
-		{	
+		{
 			this.callbacks = callbacks ?? new List<Func<TReturn>>();
 		}
 

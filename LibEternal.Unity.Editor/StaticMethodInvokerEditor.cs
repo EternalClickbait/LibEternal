@@ -16,11 +16,11 @@ namespace LibEternal.Unity.Editor
 
 		private readonly List<MethodInfo> staticMethods = new List<MethodInfo>(100);
 
-		//If true, show a large dropdown rather than one each for (the namespace, the class and the method)
-		private bool shortView;
-
 		//We need to somehow store which method we were looking at
 		private int namespaceIndex, typeIndex, methodIndex, shortViewMethodIndex;
+
+		//If true, show a large dropdown rather than one each for (the namespace, the class and the method)
+		private bool shortView;
 
 		public StaticMethodInvokerEditor()
 		{
@@ -71,7 +71,8 @@ namespace LibEternal.Unity.Editor
 
 				if (GUILayout.Button("Invoke"))
 				{
-					object returnValue = staticMethods.First(m => FormatMethodName(m) == methodNames[shortViewMethodIndex]).Invoke(null, new object[0]);
+					object returnValue = staticMethods.First(m => FormatMethodName(m) == methodNames[shortViewMethodIndex])
+						.Invoke(null, new object[0]);
 					Debug.Log($"Return value was: {returnValue ?? "<null>"}");
 				}
 			}
@@ -125,7 +126,7 @@ namespace LibEternal.Unity.Editor
 					Debug.Log($"Return value was: {returnValue ?? "<null>"}");
 				}
 			}
-			
+
 			GUILayout.Space(20);
 			// ReSharper disable once InvertIf
 			if (GUILayout.Button("Update list of functions", EditorStyles.miniButtonMid))
