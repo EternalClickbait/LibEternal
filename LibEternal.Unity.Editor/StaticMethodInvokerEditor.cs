@@ -9,11 +9,20 @@ using Debug = UnityEngine.Debug;
 
 namespace LibEternal.Unity.Editor
 {
+	/// <summary>
+	///     An editor class for invoking static methods from the unity inspector
+	/// </summary>
 	[CustomEditor(typeof(StaticMethodInvoker))]
 	public sealed class StaticMethodInvokerEditor : UnityEditor.Editor
 	{
-		private const BindingFlags Flags = BindingFlags.Instance | BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+		/// <summary>
+		///     The binding flags used to search for methods
+		/// </summary>
+		private const BindingFlags Flags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
+		/// <summary>
+		/// A list of all methods we found
+		/// </summary>
 		private readonly List<MethodInfo> staticMethods = new List<MethodInfo>(100);
 
 		//We need to somehow store which method we were looking at
@@ -22,6 +31,9 @@ namespace LibEternal.Unity.Editor
 		//If true, show a large dropdown rather than one each for (the namespace, the class and the method)
 		private bool shortView;
 
+		/// <summary>
+		/// The default public constructor
+		/// </summary>
 		public StaticMethodInvokerEditor()
 		{
 			Init();
@@ -54,6 +66,7 @@ namespace LibEternal.Unity.Editor
 			}
 		}
 
+		/// <inheritdoc />
 		public override void OnInspectorGUI()
 		{
 			shortView = GUILayout.Toggle(shortView, "Use short view");

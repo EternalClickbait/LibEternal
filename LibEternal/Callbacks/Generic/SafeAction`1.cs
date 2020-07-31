@@ -9,12 +9,15 @@ namespace LibEternal.Callbacks.Generic
 	public class SafeAction<T1>
 	{
 		/// <inheritdoc cref="SafeAction.callbacks" />
-		private readonly List<Action<T1>> callbacks;
+		private readonly HashSet<Action<T1>> callbacks;
+
+		//Temporary
+		public IReadOnlyCollection<Action<T1>> Callbacks => callbacks;
 
 		/// <inheritdoc cref="SafeAction(List{Action})" />
-		public SafeAction([CanBeNull] List<Action<T1>> callbacks = null)
+		public SafeAction([CanBeNull] IList<Action<T1>> callbacks = null)
 		{
-			this.callbacks = callbacks ?? new List<Action<T1>>();
+			this.callbacks = callbacks != null ? new HashSet<Action<T1>>(callbacks) : new HashSet<Action<T1>>();
 		}
 
 		/// <inheritdoc cref="SafeAction.Event" />
@@ -29,9 +32,8 @@ namespace LibEternal.Callbacks.Generic
 		public List<Exception> InvokeSafe(T1 param1)
 		{
 			List<Exception> exceptions = new List<Exception>();
-			for (int i = 0; i < callbacks.Count; i++)
+			foreach (Action<T1> action in callbacks)
 			{
-				Action<T1> action = callbacks[i];
 				try
 				{
 					action?.Invoke(param1);
