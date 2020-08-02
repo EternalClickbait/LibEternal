@@ -8,22 +8,13 @@ namespace LibEternal.Callbacks.Generic
 	///     A safe alternative to an <see cref="Action" />
 	/// </summary>
 	[PublicAPI]
-	public class SafeAction0
+	public class SafeAction
 	{
 		/// <summary>
 		///     The <see cref="List{T}" /> of callbacks
 		/// </summary>
 		private readonly List<Action> callbacks;
-
-		/// <summary>
-		///     The constructor to instantiate a new <see cref="SafeAction" />
-		/// </summary>
-		/// <param name="callbacks">An optional <see cref="List{T}" /> of <see cref="Action" />s to use as a base</param>
-		public SafeAction0([CanBeNull] List<Action> callbacks = null)
-		{
-			this.callbacks = callbacks ?? new List<Action>();
-		}
-
+		
 		/// <summary>
 		///     An event used to add and remove <see cref="Action" />s from the invocation list
 		/// </summary>
@@ -31,6 +22,15 @@ namespace LibEternal.Callbacks.Generic
 		{
 			add => callbacks.Add(value);
 			remove => callbacks.Remove(value);
+		}
+		
+		/// <summary>
+		///     The constructor to instantiate a new <see cref="SafeAction" />
+		/// </summary>
+		/// <param name="callbacks">An optional <see cref="List{T}" /> of <see cref="Action" />s to use as a base</param>
+		public SafeAction([CanBeNull] List<Action> callbacks = null)
+		{
+			this.callbacks = callbacks ?? new List<Action>();
 		}
 
 		/// <summary>

@@ -5,7 +5,7 @@
 
 <#
 	//The maximum amount of generic type arguments 
-	const byte maxGenericTypeArgs = 3;
+	const byte maxGenericTypeArgs = 1;
 
 	for (int i = 0; i <= maxGenericTypeArgs; i++)
 	{
@@ -15,35 +15,105 @@
 #>
 
 <#+
-	private void Create(int numTypeArgs)
+	public string MakeXmlSafe(string str)
 	{
-		#region Get the string form of the generic type argument
-		if (numTypeArgs < 0) Error($"Number of type args below 0: {numTypeArgs}");
-		string actionGenericType;
-		//No args
-		if (numTypeArgs == 0) actionGenericType = "Action";
-		else
-		{
-			StringBuilder builder = new StringBuilder("Action<");
-			for (int i = 0; i < numTypeArgs; i++)
-			{
-				//Append a new generic type argument e.g. "T1"
-				builder.AppendFormat("T{0}", i);
-				//Add a ', ' if it's not the last type arg
-				if (i < numTypeArgs - 1) builder.Append(", ");
-			}
-			builder.Append('>');
-
-			actionGenericType = builder.ToString();
-		}
-		Warning($"Generating {actionGenericType}");
-		#endregion
+		return str.Replace('<', '{').Replace('>', '}');
 	}
 #>
 
 <#+
+	private void Create(int numTypeArgs)
+	{
+		ClearIndent();
+#>
+//Generated using T4 templates
+
+using LibEternal.JetBrains.Annotations;
+using System;
+using System.Collections.Generic;
+
+namespace LibEternal.Callbacks.Generic
+{
+<#+
+		#region Get the string form of the generic type argument
+
+		if (numTypeArgs < 0) Error($"Number of type args below 0: {numTypeArgs}");
+		string genericTypeArgs;
+		//No args
+		if (numTypeArgs == 0) genericTypeArgs = "";
+		else
+		{
+			StringBuilder typeArgBuilder = new StringBuilder("<");
+			for (int i = 0; i < numTypeArgs; i++)
+			{
+				//Append a new generic type argument e.g. "T1"
+				typeArgBuilder.AppendFormat("T{0}", i);
+				//Add a ', ' if it's not the last type arg
+				if (i < numTypeArgs - 1) typeArgBuilder.Append(", ");
+			}
+			typeArgBuilder.Append('>');
+
+			genericTypeArgs = typeArgBuilder.ToString();
+		}
+		const string nonGenericTypeName = "_SafeAction";
+		string fullTypeName = nonGenericTypeName + genericTypeArgs;
+		string baseTypeName = $"Action{genericTypeArgs}";
+		Warning($"Generating {fullTypeName} ({baseTypeName})");
+
+		#endregion
+
+		PushIndent("\t");
+#>
+/// <summary>
+///     A safe alternative to an <see cref="<#= MakeXmlSafe(baseTypeName) #>" />
+/// </summary>
+[PublicAPI, System.Runtime.CompilerServices.CompilerGenerated]
+public sealed class <#= fullTypeName #>
+{
+<#+
+		PushIndent("\t");
+
+		#region Creating the backing fields
+#>
+/// <summary>
+///     The <see cref="HashSet{T}" /> of callbacks.
+/// </summary>
+private readonly HashSet<<#= baseTypeName #>> callbacks;
+
+/// <summary>
+///     An event used to add and remove <see cref="<#=MakeXmlSafe(baseTypeName) #>" />s from the invocation list
+/// </summary>
+public event <#=baseTypeName #> Event
+{
+	add => callbacks.Add(value);
+	remove => callbacks.Remove(value);
+}
+
+<#+
+		#endregion
+
+		#region Constructor(s)
+#>
+/// <summary>
+///     The constructor to instantiate a new <see cref="SafeAction" />
+/// </summary>
+/// <param name="callbacks">An optional <see cref="List{T}" /> of <see cref="Action" />s to use as a base</param>
+public <#= nonGenericTypeName #>([CanBeNull] IEnumerable<<#=baseTypeName #>> callbacks = null)
+{
+    // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+    if(callbacks is null) this.callbacks = new HashSet<<#=baseTypeName #>>();
+    else this.callbacks = new HashSet<<#=baseTypeName #>>(callbacks);
+}
+
+<#+
+		#endregion
+
+		SaveOutput($"Test{numTypeArgs}.cs");
+	}
+#>
+<#+
 		//Lets us save to a different output file than the default. (credit: https://stackoverflow.com/a/44340464)
-	public  void SaveOutput(string outputFileName)
+	private void SaveOutput(string outputFileName)
 	{
 		string templateDirectory = Path.GetDirectoryName(Host.TemplateFile);
 		string outputFilePath = Path.Combine(templateDirectory!, outputFileName);
