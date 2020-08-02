@@ -3,6 +3,7 @@ using Serilog;
 using Serilog.Sinks.SystemConsole.Themes;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 
@@ -10,7 +11,8 @@ namespace LibEternal.Generators
 {
 	internal static class Program
 	{
-		private static void Main()
+		
+		public static void Main()
 		{
 			//Set up the logger
 			Log.Logger = new LoggerConfiguration()
@@ -18,32 +20,72 @@ namespace LibEternal.Generators
 				.MinimumLevel.Verbose()
 				.CreateLogger();
 
+			//Instantiate the generators
 			List<ICodeGenerator> codeGenerators = GetAllGenerators();
-			Log.Information("List of generators: {Generators}", codeGenerators);
+			Log.Information("List of generators: {Generators}{Newline}", codeGenerators, Environment.NewLine);
 
-			RunAllGenerators(codeGenerators);
-			Log.Information("Code generation complete!");
+			//And run them
+			List<CodeGeneratorOutput> outputs = RunAllGenerators(codeGenerators);
+			Log.Information("Code generation complete!{Newline}", Environment.NewLine);
+
+			//Now write it all to file
+			WriteToFile(outputs);
 
 			//Finish up
 			Log.CloseAndFlush();
 			Console.ReadKey();
 		}
 
-		private static void RunAllGenerators([NotNull] IReadOnlyList<ICodeGenerator> generators)
+		private static void WriteToFile(List<CodeGeneratorOutput> outputs)
 		{
-			Log.Information("");
-			for (int i = 0; i < generators.Count; i++)
+			foreach (CodeGeneratorOutput output in outputs)
 			{
-				ICodeGenerator generator = generators[i];
-				Log.Debug("Running {Generator} code generator", generator);
+				Log.Verbose("Writing output to {RelativeFilePath}", output.RelativeOutputPath);
+				try
+				{
+					FileInfo fileInfo = new FileInfo(output.RelativeOutputPath);
 
-				string output = generator.GenerateOutput();
-				Log.Information("Output for {Generator} was:\n {Output}", generator, output);
-				Log.Information("");
+					if (!fileInfo.Exists)
+						if (fileInfo.Directory != null)
+							Directory.CreateDirectory(fileInfo.Directory.FullName);
+
+
+					using (StreamWriter writer = File.CreateText(output.RelativeOutputPath))
+					{
+						writer.Write(output.Output);
+					}
+				}
+				catch (Exception e)
+				{
+					Log.Warning(e, "Error outputting to file {OutputFilePath}", output.RelativeOutputPath);
+				}
 			}
 		}
 
-		[Pure]
+		[MustUseReturnValue]
+		[NotNull]
+		private static List<CodeGeneratorOutput> RunAllGenerators([NotNull] IReadOnlyList<ICodeGenerator> generators)
+		{
+			List<CodeGeneratorOutput> allOutput = new List<CodeGeneratorOutput>();
+			for (int i = 0; i < generators.Count; i++)
+			{
+				ICodeGenerator generator = generators[i];
+				Log.Debug("Running {Generator} code generator ({Index}/{Total})", generator, i + 1, generators.Count);
+
+				//Get the output
+				IList<CodeGeneratorOutput> output = generator.GenerateOutput();
+				//And add it to the 'superlist'
+				if (output != null)
+					allOutput.AddRange(output);
+				Log.Information("Output for {Generator} was:{Newline} {Output}", generator, Environment.NewLine, output);
+				if (i != generators.Count - 1)
+					Log.Information("{Newline}", Environment.NewLine);
+			}
+
+			return allOutput;
+		}
+
+		[MustUseReturnValue]
 		[NotNull]
 		private static List<ICodeGenerator> GetAllGenerators()
 		{
@@ -62,13 +104,13 @@ namespace LibEternal.Generators
 				//Skip abstract classes and interfaces
 				if (type.IsAbstract)
 				{
-					Log.Verbose("Skipping abstract type {@type}", type);
+					Log.Verbose("Skipping abstract type {@Type}", type);
 					continue;
 				}
 
 				if (type.IsInterface)
 				{
-					Log.Verbose("Skipping interface type {@type}", type);
+					Log.Verbose("Skipping interface type {@Type}", type);
 					continue;
 				}
 
@@ -76,7 +118,7 @@ namespace LibEternal.Generators
 				ICodeGenerator instance = null;
 				if (type.IsValueType)
 				{
-					Log.Verbose("Type {@type} is value type", type);
+					Log.Verbose("Type {@Type} is value type", type);
 					try
 					{
 						object obj = Activator.CreateInstance(type, true);
@@ -84,12 +126,12 @@ namespace LibEternal.Generators
 					}
 					catch (Exception e)
 					{
-						Log.Debug(e, "Error instantiating value type {@type}", type);
+						Log.Debug(e, "Error instantiating value type {@Type}", type);
 					}
 				}
 				else
 				{
-					Log.Verbose("Type {@type} is reference type", type);
+					Log.Verbose("Type {@Type} is reference type", type);
 
 					//Thanks stackoverflow (https://stackoverflow.com/q/4681031)
 					//Gets the first constructor that takes no parameters or has all optional parameters
@@ -99,7 +141,7 @@ namespace LibEternal.Generators
 
 					if (ctor is null)
 					{
-						Log.Debug("Reference type {@type} does not have an empty constructor", type);
+						Log.Debug("Reference type {@Type} does not have an empty constructor", type);
 						continue;
 					}
 
@@ -111,7 +153,7 @@ namespace LibEternal.Generators
 					}
 					catch (Exception e)
 					{
-						Log.Debug(e, "Error instantiating reference type {@type}", type);
+						Log.Debug(e, "Error instantiating reference type {@Type}", type);
 					}
 				}
 

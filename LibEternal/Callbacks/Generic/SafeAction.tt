@@ -1,0 +1,53 @@
+﻿<#@ template language="C#" hostSpecific="true" #>
+<#@ output extension=".cs" #>
+<#@ import namespace="System.IO" #>
+<#@ import namespace="System.Text" #>
+
+<#
+	//The maximum amount of generic type arguments 
+	const byte maxGenericTypeArgs = 3;
+
+	for (int i = 0; i <= maxGenericTypeArgs; i++)
+	{
+		Create(i);
+	}
+
+#>
+
+<#+
+	private void Create(int numTypeArgs)
+	{
+		#region Get the string form of the generic type argument
+		if (numTypeArgs < 0) Error($"Number of type args below 0: {numTypeArgs}");
+		string actionGenericType;
+		//No args
+		if (numTypeArgs == 0) actionGenericType = "Action";
+		else
+		{
+			StringBuilder builder = new StringBuilder("Action<");
+			for (int i = 0; i < numTypeArgs; i++)
+			{
+				//Append a new generic type argument e.g. "T1"
+				builder.AppendFormat("T{0}", i);
+				//Add a ', ' if it's not the last type arg
+				if (i < numTypeArgs - 1) builder.Append(", ");
+			}
+			builder.Append('>');
+
+			actionGenericType = builder.ToString();
+		}
+		Warning($"Generating {actionGenericType}");
+		#endregion
+	}
+#>
+
+<#+
+		//Lets us save to a different output file than the default. (credit: https://stackoverflow.com/a/44340464)
+	public  void SaveOutput(string outputFileName)
+	{
+		string templateDirectory = Path.GetDirectoryName(Host.TemplateFile);
+		string outputFilePath = Path.Combine(templateDirectory!, outputFileName);
+		File.WriteAllText(outputFilePath, GenerationEnvironment.ToString());
+		GenerationEnvironment.Remove(0, GenerationEnvironment.Length);
+	}
+#>

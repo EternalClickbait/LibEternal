@@ -25,4 +25,28 @@
       <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Update="Callbacks\Generic\Main.tt">
+        <Generator>TextTemplatingFileGenerator</Generator>
+        <LastGenOutput>Main.cs</LastGenOutput>
+      </None>
+      <None Update="Callbacks\Generic\SafeAction.tt">
+        <Generator>TextTemplatingFileGenerator</Generator>
+        <LastGenOutput>SafeAction.cs</LastGenOutput>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Callbacks\Generic\Main.cs">
+        <AutoGen>True</AutoGen>
+        <DesignTime>True</DesignTime>
+        <DependentUpon>Main.tt</DependentUpon>
+      </Compile>
+      <Compile Update="Callbacks\Generic\SafeAction.cs">
+        <AutoGen>True</AutoGen>
+        <DesignTime>True</DesignTime>
+        <DependentUpon>SafeAction.tt</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
 </Project>

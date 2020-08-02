@@ -1,10 +1,11 @@
 ﻿using LibEternal.JetBrains.Annotations;
+using System.Collections.Generic;
 
 namespace LibEternal.Generators
 {
 	public interface ICodeGenerator
 	{
 		[Pure, CanBeNull]
-		string GenerateOutput();
+		IList<CodeGeneratorOutput> GenerateOutput();
 	}
 }

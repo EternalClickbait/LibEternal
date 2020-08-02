@@ -10,4 +10,8 @@
       <ProjectReference Include="..\LibEternal\LibEternal.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="System.CodeDom" Version="4.7.0" />
+    </ItemGroup>
+
 </Project>
