@@ -1,6 +1,5 @@
 ﻿<#@ template language="C#" hostSpecific="true" #>
 <#@ output extension=".cs" #>
-<#@ import namespace="Microsoft.VisualStudio.TextTemplating" #>
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Text" #>
 <#
@@ -36,6 +35,7 @@
 //Generated using T4 templates
 
 using LibEternal.JetBrains.Annotations;
+using LibEternal.Collections;
 using System;
 using System.Collections.Generic;
 
@@ -89,6 +89,8 @@ public event <#=baseCallbackTypeName #> Event
 	remove => callbacks.Remove(value);
 }
 
+public readonly ReadonlyHashSet<<#= baseCallbackTypeName#>> Callbacks;
+
 <#+
 
 #>
@@ -101,6 +103,8 @@ public <#= NonGenericTypeName #>([CanBeNull] IEnumerable<<#=baseCallbackTypeName
     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
     if(callbacks is null) this.callbacks = new HashSet<<#=baseCallbackTypeName #>>();
     else this.callbacks = new HashSet<<#=baseCallbackTypeName #>>(callbacks);
+    //Initialize the ReadonlyHashSet field using our newly made HashSet
+    Callbacks = new ReadonlyHashSet<<#= baseCallbackTypeName#>>(this.callbacks);
 }
 
 <#+
