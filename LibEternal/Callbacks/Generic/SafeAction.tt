@@ -1,18 +1,21 @@
 ﻿<#@ template language="C#" hostSpecific="true" #>
 <#@ output extension=".cs" #>
+<#@ import namespace="Microsoft.VisualStudio.TextTemplating" #>
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Text" #>
-
-<#  
-    //CONFIG!!!
-	//The maximum amount of generic type arguments 
-	const byte maxGenericTypeArgs = 2;
-
-	for (int i = 0; i <= maxGenericTypeArgs; i++)
+<#
+	for (int i = 0; i <= MaxGenericTypeArgs; i++)
 	{
 		Create(i);
 	}
+#>
 
+<#+
+		//CONFIG!!!
+		//The maximum amount of generic type arguments 
+		private const byte MaxGenericTypeArgs = 2;
+		private const string OutputFileFormat = NonGenericTypeName + "`{0}.cs";
+		private const string NonGenericTypeName = "SafeAction";
 #>
 
 <#+
@@ -22,7 +25,8 @@
 	private static string MakeXmlSafe(string str)
 	{
 		return str.Replace('<', '{').Replace('>', '}');
-	}#>
+	}
+#>
 
 <#+
 	private void Create(int numTypeArgs)
@@ -56,8 +60,7 @@ namespace LibEternal.Callbacks.Generic
 
 			genericTypeArgs = typeArgBuilder.ToString();
 		}
-		const string nonGenericTypeName = "_SafeAction";
-		string fullTypeName = nonGenericTypeName + genericTypeArgs;
+		string fullTypeName = NonGenericTypeName + genericTypeArgs;
 		string baseCallbackTypeName = $"Action{genericTypeArgs}";
 		Warning($"Generating {fullTypeName} ({baseCallbackTypeName})");
 
@@ -71,7 +74,6 @@ public sealed class <#= fullTypeName #>
 {
 <#+
 		PushIndent("\t");
-
 #>
 /// <summary>
 ///     The <see cref="HashSet{T}" /> of callbacks.
@@ -91,10 +93,10 @@ public event <#=baseCallbackTypeName #> Event
 
 #>
 /// <summary>
-///     The constructor to instantiate a new <see cref="SafeAction" />
+///     The constructor to instantiate a new <see cref="<#= MakeXmlSafe(fullTypeName) #>" />
 /// </summary>
 /// <param name="callbacks">An optional <see cref="List{T}" /> of <see cref="Action" />s to use as a base</param>
-public <#= nonGenericTypeName #>([CanBeNull] IEnumerable<<#=baseCallbackTypeName #>> callbacks = null)
+public <#= NonGenericTypeName #>([CanBeNull] IEnumerable<<#=baseCallbackTypeName #>> callbacks = null)
 {
     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
     if(callbacks is null) this.callbacks = new HashSet<<#=baseCallbackTypeName #>>();
@@ -157,15 +159,18 @@ public List<Exception> InvokeSafe(<#= inputParams #>)
 	return exceptions;
 }
 <#+
-        //Write the closing indent (for the class and namespace)
-        ClearIndent();
+		//Write the closing indent (for the class and namespace)
+		ClearIndent();
 #>
     }
-}<#+ //Save the output
-		SaveOutput($"Test{numTypeArgs}.cs");
-	}#>
+}<#+
+		//Save the output
+		SaveOutput(string.Format(OutputFileFormat, numTypeArgs));
+	}
+#>
 
-<#+ //Save Output function
+<#+
+		//Save Output function
 		//Lets us save to a different output file than the default. (credit: https://stackoverflow.com/a/44340464)
 	private void SaveOutput(string outputFileName)
 	{
@@ -173,4 +178,5 @@ public List<Exception> InvokeSafe(<#= inputParams #>)
 		string outputFilePath = Path.Combine(templateDirectory!, outputFileName);
 		File.WriteAllText(outputFilePath, GenerationEnvironment.ToString());
 		GenerationEnvironment.Remove(0, GenerationEnvironment.Length);
-	}#>
+	}
+#>
