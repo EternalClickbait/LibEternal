@@ -15,11 +15,13 @@
 #>
 
 <#+
-	public string MakeXmlSafe(string str)
+	/// <summary>
+	///     Makes a string containing generic arguments XML-safe
+	/// </summary>
+	private static string MakeXmlSafe(string str)
 	{
 		return str.Replace('<', '{').Replace('>', '}');
-	}
-#>
+	}#>
 
 <#+
 	private void Create(int numTypeArgs)
@@ -57,15 +59,15 @@ namespace LibEternal.Callbacks.Generic
 		}
 		const string nonGenericTypeName = "_SafeAction";
 		string fullTypeName = nonGenericTypeName + genericTypeArgs;
-		string baseTypeName = $"Action{genericTypeArgs}";
-		Warning($"Generating {fullTypeName} ({baseTypeName})");
+		string baseCallbackTypeName = $"Action{genericTypeArgs}";
+		Warning($"Generating {fullTypeName} ({baseCallbackTypeName})");
 
 		#endregion
 
 		PushIndent("\t");
 #>
 /// <summary>
-///     A safe alternative to an <see cref="<#= MakeXmlSafe(baseTypeName) #>" />
+///     A safe alternative to an <see cref="<#= MakeXmlSafe(baseCallbackTypeName) #>" />
 /// </summary>
 [PublicAPI, System.Runtime.CompilerServices.CompilerGenerated]
 public sealed class <#= fullTypeName #>
@@ -78,12 +80,12 @@ public sealed class <#= fullTypeName #>
 /// <summary>
 ///     The <see cref="HashSet{T}" /> of callbacks.
 /// </summary>
-private readonly HashSet<<#= baseTypeName #>> callbacks;
+private readonly HashSet<<#= baseCallbackTypeName #>> callbacks;
 
 /// <summary>
-///     An event used to add and remove <see cref="<#=MakeXmlSafe(baseTypeName) #>" />s from the invocation list
+///     An event used to add and remove <see cref="<#=MakeXmlSafe(baseCallbackTypeName) #>" />s from the invocation list
 /// </summary>
-public event <#=baseTypeName #> Event
+public event <#=baseCallbackTypeName #> Event
 {
 	add => callbacks.Add(value);
 	remove => callbacks.Remove(value);
@@ -98,19 +100,72 @@ public event <#=baseTypeName #> Event
 ///     The constructor to instantiate a new <see cref="SafeAction" />
 /// </summary>
 /// <param name="callbacks">An optional <see cref="List{T}" /> of <see cref="Action" />s to use as a base</param>
-public <#= nonGenericTypeName #>([CanBeNull] IEnumerable<<#=baseTypeName #>> callbacks = null)
+public <#= nonGenericTypeName #>([CanBeNull] IEnumerable<<#=baseCallbackTypeName #>> callbacks = null)
 {
     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
-    if(callbacks is null) this.callbacks = new HashSet<<#=baseTypeName #>>();
-    else this.callbacks = new HashSet<<#=baseTypeName #>>(callbacks);
+    if(callbacks is null) this.callbacks = new HashSet<<#=baseCallbackTypeName #>>();
+    else this.callbacks = new HashSet<<#=baseCallbackTypeName #>>(callbacks);
+}
+
+<#+
+		//A string for the parameters passed into InvokeSafe() (e.g. InvokeSafe<T0, T1>("T0 param0, T1 param1"))
+		string inputParams;
+		//A string for the parameters we pass into the callbacks (e.g. callbacks[i].Invoke("param1, param2"))
+		string callbackParams;
+		//Don't need a string for the generic type args, created it earlier
+		if (numTypeArgs == 0) inputParams = callbackParams = "";
+		else
+		{
+			StringBuilder inputParamsBuilder = new StringBuilder();
+			StringBuilder callbackParamsBuilder = new StringBuilder();
+			for (int i = 0; i < numTypeArgs; i++)
+			{
+				string typeArgument = $"T{i}";
+				string paramName = $"param{i}";
+				//The input params need a type argument, but the callback ones don't
+				inputParamsBuilder.Append(typeArgument).Append(' ').Append(paramName);
+				callbackParamsBuilder.Append(paramName);
+
+				//If we're not on the last type/parameter
+				if (i < numTypeArgs - 1)
+				{
+				}
+			}
+		}
+#>
+
+/// <summary>
+///     Invokes the <see cref="callbacks" />, catching and returning all thrown <see cref="Exception" />s
+/// </summary>
+/// <returns>A <see cref="List{T}" /> of <see cref="Exception" />s that were thrown during invocation</returns>
+[NotNull]
+public List<Exception> InvokeSafe(<#= inputParams #>)
+{
+	List<Exception> exceptions = new List<Exception>();
+
+	foreach (<#= baseCallbackTypeName #> callback in callbacks)
+	{
+		try
+		{
+			callback?.Invoke(<#= callbackParams #>);
+		}
+		//Called if there's an exception in one of the callbacks
+		catch (Exception e)
+		{
+			exceptions.Add(e);
+		}
+	}
+
+	return exceptions;
 }
 
 <#+
 		#endregion
 
 		SaveOutput($"Test{numTypeArgs}.cs");
-	}
-#>
+	}#>
+
+
 <#+
 		//Lets us save to a different output file than the default. (credit: https://stackoverflow.com/a/44340464)
 	private void SaveOutput(string outputFileName)
@@ -119,5 +174,4 @@ public <#= nonGenericTypeName #>([CanBeNull] IEnumerable<<#=baseTypeName #>> cal
 		string outputFilePath = Path.Combine(templateDirectory!, outputFileName);
 		File.WriteAllText(outputFilePath, GenerationEnvironment.ToString());
 		GenerationEnvironment.Remove(0, GenerationEnvironment.Length);
-	}
-#>
+	}#>

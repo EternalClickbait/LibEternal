@@ -37,3 +37,29 @@ namespace LibEternal.Callbacks.Generic
 		    else this.callbacks = new HashSet<Action<T0>>(callbacks);
 		}
 		
+		
+		/// <summary>
+		///     Invokes the <see cref="callbacks" />, catching and returning all thrown <see cref="Exception" />s
+		/// </summary>
+		/// <returns>A <see cref="List{T}" /> of <see cref="Exception" />s that were thrown during invocation</returns>
+		[NotNull]
+		public List<Exception> InvokeSafe()
+		{
+			List<Exception> exceptions = new List<Exception>();
+		
+			foreach (Action<T0> callback in callbacks)
+			{
+				try
+				{
+					callback?.Invoke();
+				}
+				//Called if there's an exception in one of the callbacks
+				catch (Exception e)
+				{
+					exceptions.Add(e);
+				}
+			}
+		
+			return exceptions;
+		}
+		
