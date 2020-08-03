@@ -89,6 +89,7 @@ public event <#=baseCallbackTypeName #> Event
 	remove => callbacks.Remove(value);
 }
 
+//TODO: Add some docs to this
 public readonly ReadonlyHashSet<<#= baseCallbackTypeName#>> Callbacks;
 
 <#+

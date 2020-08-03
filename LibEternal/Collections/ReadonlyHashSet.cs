@@ -3,8 +3,10 @@ using System.Collections.Generic;
 
 namespace LibEternal.Collections
 {
+	//From https://stackoverflow.com/a/59412619
 	/// <summary>Wrapper for a <see cref="HashSet{T}" /> which allows only for lookup.</summary>
 	/// <typeparam name="T">Type of items in the set.</typeparam>
+	// ReSharper disable once ClassCanBeSealed.Global
 	public class ReadonlyHashSet<T> : IReadonlySet<T>
 	{
 		/// <summary>

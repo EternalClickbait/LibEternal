@@ -27,6 +27,7 @@ namespace LibEternal.Callbacks.Generic
 			remove => callbacks.Remove(value);
 		}
 		
+		//TODO: Add some docs to this
 		public readonly ReadonlyHashSet<Action<T0>> Callbacks;
 		
 		/// <summary>
