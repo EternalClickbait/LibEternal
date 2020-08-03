@@ -3,9 +3,10 @@
 <#@ import namespace="System.IO" #>
 <#@ import namespace="System.Text" #>
 
-<#
+<#  
+    //CONFIG!!!
 	//The maximum amount of generic type arguments 
-	const byte maxGenericTypeArgs = 1;
+	const byte maxGenericTypeArgs = 2;
 
 	for (int i = 0; i <= maxGenericTypeArgs; i++)
 	{
@@ -37,8 +38,6 @@ using System.Collections.Generic;
 namespace LibEternal.Callbacks.Generic
 {
 <#+
-		#region Get the string form of the generic type argument
-
 		if (numTypeArgs < 0) Error($"Number of type args below 0: {numTypeArgs}");
 		string genericTypeArgs;
 		//No args
@@ -62,8 +61,6 @@ namespace LibEternal.Callbacks.Generic
 		string baseCallbackTypeName = $"Action{genericTypeArgs}";
 		Warning($"Generating {fullTypeName} ({baseCallbackTypeName})");
 
-		#endregion
-
 		PushIndent("\t");
 #>
 /// <summary>
@@ -75,7 +72,6 @@ public sealed class <#= fullTypeName #>
 <#+
 		PushIndent("\t");
 
-		#region Creating the backing fields
 #>
 /// <summary>
 ///     The <see cref="HashSet{T}" /> of callbacks.
@@ -92,9 +88,7 @@ public event <#=baseCallbackTypeName #> Event
 }
 
 <#+
-		#endregion
 
-		#region Constructor(s)
 #>
 /// <summary>
 ///     The constructor to instantiate a new <see cref="SafeAction" />
@@ -129,8 +123,12 @@ public <#= nonGenericTypeName #>([CanBeNull] IEnumerable<<#=baseCallbackTypeName
 				//If we're not on the last type/parameter
 				if (i < numTypeArgs - 1)
 				{
+					inputParamsBuilder.Append(", ");
+					callbackParamsBuilder.Append(", ");
 				}
 			}
+			inputParams = inputParamsBuilder.ToString();
+			callbackParams = callbackParamsBuilder.ToString();
 		}
 #>
 
@@ -158,15 +156,16 @@ public List<Exception> InvokeSafe(<#= inputParams #>)
 
 	return exceptions;
 }
-
 <#+
-		#endregion
-
+        //Write the closing indent (for the class and namespace)
+        ClearIndent();
+#>
+    }
+}<#+ //Save the output
 		SaveOutput($"Test{numTypeArgs}.cs");
 	}#>
 
-
-<#+
+<#+ //Save Output function
 		//Lets us save to a different output file than the default. (credit: https://stackoverflow.com/a/44340464)
 	private void SaveOutput(string outputFileName)
 	{
