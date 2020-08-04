@@ -1,43 +1,67 @@
-﻿using LibEternal.JetBrains.Annotations;
+//Generated using T4 templates
+
+using LibEternal.JetBrains.Annotations;
+using LibEternal.Collections;
 using System;
 using System.Collections.Generic;
 
 namespace LibEternal.Callbacks.Generic
 {
 	/// <summary>
-	///     A safe alternative to an <see cref="Action" />
+	///     A safe alternative to an <see cref="Func{T0, TReturn}" />
 	/// </summary>
-	[PublicAPI]
-	public class SafeFunc<T1, TReturn>
+	[PublicAPI, System.Runtime.CompilerServices.CompilerGenerated]
+	public sealed class SafeFunc<T0, TReturn>
 	{
-		/// <inheritdoc cref="SafeFunc{TReturn}.callbacks" />
-		private readonly List<Func<T1, TReturn>> callbacks;
-
-		/// <inheritdoc cref="SafeFunc{TReturn}(List{Func{TReturn}})" />
-		public SafeFunc([CanBeNull] List<Func<T1, TReturn>> callbacks = null)
-		{
-			this.callbacks = callbacks ?? new List<Func<T1, TReturn>>();
-		}
-
-		/// <inheritdoc cref="SafeFunc{TReturn}.Event" />
-		public event Func<T1, TReturn> Event
+		/// <summary>
+		///     The <see cref="HashSet{T}" /> of callbacks.
+		/// </summary>
+		private readonly HashSet<Func<T0, TReturn>> callbacks;
+		
+		/// <summary>
+		///     An event used to add and remove <see cref="Func{T0, TReturn}" />s from the invocation list
+		/// </summary>
+		public event Func<T0, TReturn> Event
 		{
 			add => callbacks.Add(value);
 			remove => callbacks.Remove(value);
 		}
-
-		/// <inheritdoc cref="SafeFunc{TReturn}.InvokeSafe" />
-		public (List<Exception> exceptions, List<TReturn> results) InvokeSafe(T1 param1)
+		
+		/// <summary>
+		///     A readonly wrapper around the set of callbacks, to allow read-only access
+		/// </summary>
+		public readonly ReadonlySet<Func<T0, TReturn>> Callbacks;
+		
+		/// <summary>
+		///     The constructor to instantiate a new <see cref="SafeFunc{T0, TReturn}" />
+		/// </summary>
+		/// <param name="callbacks">An optional <see cref="List{T}" /> of <see cref="Action" />s to use as a base</param>
+		public SafeFunc([CanBeNull] IEnumerable<Func<T0, TReturn>> callbacks = null)
+		{
+		    // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+		    if(callbacks is null) this.callbacks = new HashSet<Func<T0, TReturn>>();
+		    else this.callbacks = new HashSet<Func<T0, TReturn>>(callbacks);
+		    //Initialize the ReadonlySet field using our newly made HashSet
+		    Callbacks = new ReadonlySet<Func<T0, TReturn>>(this.callbacks);
+		}
+		
+		
+		/// <summary>
+		///     Invokes the <see cref="callbacks" />, catching and returning all thrown <see cref="Exception" />s
+		/// </summary>
+		/// <returns>A <see cref="List{T}" /> of <see cref="Exception" />s that were thrown during invocation</returns>
+		public (List<Exception> Exceptions, List<TReturn> Results) InvokeSafe(T0 param0)
 		{
 			List<Exception> exceptions = new List<Exception>();
-			List<TReturn> results = new List<TReturn>();
-
-			for (int i = 0; i < callbacks.Count; i++)
+		    List<TReturn> results = new List<TReturn>();
+		
+			foreach (Func<T0, TReturn> callback in callbacks)
 			{
-				Func<T1, TReturn> action = callbacks[i];
 				try
 				{
-					results.Add(action.Invoke(param1));
+		            if(callback is null) continue;
+					TReturn result = callback.Invoke(param0);
+		            results.Add(result);
 				}
 				//Called if there's an exception in one of the callbacks
 				catch (Exception e)
@@ -45,8 +69,8 @@ namespace LibEternal.Callbacks.Generic
 					exceptions.Add(e);
 				}
 			}
-
+		
 			return (exceptions, results);
 		}
-	}
+    }
 }

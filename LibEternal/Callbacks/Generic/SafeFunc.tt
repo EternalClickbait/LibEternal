@@ -14,7 +14,7 @@
 		//The maximum amount of generic type arguments 
 		private const byte MaxGenericTypeArgs = 2;
 		private const string OutputFileFormat = NonGenericTypeName + "`{0}.cs";
-		private const string NonGenericTypeName = "SafeAction";
+		private const string NonGenericTypeName = "SafeFunc";
 #>
 
 <#+
@@ -49,7 +49,7 @@ namespace LibEternal.Callbacks.Generic
 		}
 		string genericTypeArgs;
 		//No args
-		if (numTypeArgs == 0) genericTypeArgs = "";
+		if (numTypeArgs == 0) genericTypeArgs = "<TReturn>";
 		else
 		{
 			StringBuilder typeArgBuilder = new StringBuilder("<");
@@ -60,12 +60,12 @@ namespace LibEternal.Callbacks.Generic
 				//Add a ', ' if it's not the last type arg
 				if (i < numTypeArgs - 1) typeArgBuilder.Append(", ");
 			}
-			typeArgBuilder.Append('>');
+			typeArgBuilder.Append(", TReturn>");
 
 			genericTypeArgs = typeArgBuilder.ToString();
 		}
 		string fullTypeName = NonGenericTypeName + genericTypeArgs;
-		string baseCallbackTypeName = $"Action{genericTypeArgs}";
+		string baseCallbackTypeName = $"Func{genericTypeArgs}";
 		Warning($"Generating {fullTypeName} ({baseCallbackTypeName})");
 
 		PushIndent("\t");
@@ -96,7 +96,7 @@ public event <#=baseCallbackTypeName #> Event
 /// <summary>
 ///     A readonly wrapper around the set of callbacks, to allow read-only access
 /// </summary>
-public readonly ReadonlySet<<#= baseCallbackTypeName#>> Callbacks;
+public readonly ReadonlySet<<#= baseCallbackTypeName #>> Callbacks;
 
 <#+
 
@@ -111,7 +111,7 @@ public <#= NonGenericTypeName #>([CanBeNull] IEnumerable<<#=baseCallbackTypeName
     if(callbacks is null) this.callbacks = new HashSet<<#=baseCallbackTypeName #>>();
     else this.callbacks = new HashSet<<#=baseCallbackTypeName #>>(callbacks);
     //Initialize the ReadonlySet field using our newly made HashSet
-    Callbacks = new ReadonlySet<<#= baseCallbackTypeName#>>(this.callbacks);
+    Callbacks = new ReadonlySet<<#= baseCallbackTypeName #>>(this.callbacks);
 }
 
 <#+
@@ -149,16 +149,18 @@ public <#= NonGenericTypeName #>([CanBeNull] IEnumerable<<#=baseCallbackTypeName
 ///     Invokes the <see cref="callbacks" />, catching and returning all thrown <see cref="Exception" />s
 /// </summary>
 /// <returns>A <see cref="List{T}" /> of <see cref="Exception" />s that were thrown during invocation</returns>
-[NotNull]
-public List<Exception> InvokeSafe(<#= inputParams #>)
+public (List<Exception> Exceptions, List<TReturn> Results) InvokeSafe(<#= inputParams #>)
 {
 	List<Exception> exceptions = new List<Exception>();
+    List<TReturn> results = new List<TReturn>();
 
 	foreach (<#= baseCallbackTypeName #> callback in callbacks)
 	{
 		try
 		{
-			callback?.Invoke(<#= callbackParams #>);
+            if(callback is null) continue;
+			TReturn result = callback.Invoke(<#= callbackParams #>);
+            results.Add(result);
 		}
 		//Called if there's an exception in one of the callbacks
 		catch (Exception e)
@@ -167,7 +169,7 @@ public List<Exception> InvokeSafe(<#= inputParams #>)
 		}
 	}
 
-	return exceptions;
+	return (exceptions, results);
 }
 <#+
 		//Write the closing indent (for the class and namespace)
