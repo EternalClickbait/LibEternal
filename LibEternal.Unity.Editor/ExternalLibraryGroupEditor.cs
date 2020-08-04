@@ -26,6 +26,11 @@ namespace LibEternal.Unity.Editor
 		/// </summary>
 		private const bool PrintExtendedInfo = false;
 
+		/// <summary>
+		///     Set this to true to not print any messages at all
+		/// </summary>
+		private const bool Silent = true;
+
 		/// <inheritdoc />
 		public override void OnInspectorGUI()
 		{
@@ -47,14 +52,8 @@ namespace LibEternal.Unity.Editor
 		[MenuItem("Assets/Recompile External Libraries")]
 		public static async void RecompileAll()
 		{
-			Debug.Log("Recompiling all external libraries");
-
 			ExternalLibraryGroup[] allInstances = ScriptableObjectExtensions.GetAllInstances<ExternalLibraryGroup>();
-			if (allInstances is null || allInstances.Length == 0)
-			{
-				Debug.LogWarning("No library groups found");
-				return;
-			}
+			if (allInstances is null || allInstances.Length == 0) return;
 
 			//Loop over all groups
 			foreach (ExternalLibraryGroup libraryGroup in allInstances)
@@ -64,17 +63,19 @@ namespace LibEternal.Unity.Editor
 
 				if (libraryGroup.solutions is null || libraryGroup.solutions.Length == 0)
 				{
-					Debug.LogWarning(
-						$"\tWarning: No solutions to compile for group {libraryGroup.name}. Did you forget to set them in the inspector?");
+					if (!Silent)
+						Debug.LogWarning(
+							$"\tWarning: No solutions to compile for group {libraryGroup.name}. Did you forget to set them in the inspector?");
 				}
 				else
 				{
-					if (PrintExtendedInfo)
+					if (PrintExtendedInfo && !Silent)
 						Debug.Log($"\tCompiling library group {libraryGroup.name}");
 					//Loop over all the libraries and compile them
 					for (int i = 0; i < libraryGroup.solutions.Length; i++)
 					{
 						FileInfoWrapper solution = libraryGroup.solutions[i];
+						// ReSharper disable once RedundantAssignment
 						Stopwatch stopwatch = Stopwatch.StartNew();
 
 						FileInfo fileInfo;
@@ -85,11 +86,13 @@ namespace LibEternal.Unity.Editor
 						//If there was an error getting the fileInfo, warn the user
 						catch (Exception e)
 						{
-							Debug.LogWarning($"\t\tWarning: Invalid path for solution at index [{i}] (\"{solution.filePath}\"):\n{e}");
+							if (!Silent)
+
+								Debug.LogWarning($"\t\tWarning: Invalid path for solution at index [{i}] (\"{solution.filePath}\"):\n{e}");
 							continue;
 						}
 
-						if (PrintExtendedInfo)
+						if (PrintExtendedInfo && !Silent)
 							Debug.Log($"\t\tCompiling solution '{fileInfo.Name}' (at '{fileInfo.FullName}')");
 
 						try
@@ -120,21 +123,24 @@ namespace LibEternal.Unity.Editor
 							//Returns whichever completes first
 							Task first = await Task.WhenAny(buildTask, delayTask);
 
-							string output = process.StandardOutput.ReadToEnd();
 							//Force kill if it took too long (the delay task returned first)
 							if (first != buildTask)
 							{
-								Debug.LogError($"\t\tError: Build took too long ({stopwatch.Elapsed:m\\:ss}), force killing. Output was:\n{output}");
 								process.Kill();
+								if (!Silent)
+									Debug.LogError(
+										$"\t\tError: Force Killed Process - build took too long ({stopwatch.Elapsed:m\\:ss}). Output was:\n{await process.StandardOutput.ReadToEndAsync()}");
 								process.Dispose();
 							}
 							else
 							{
 								//Trim the newlines so the user can see if the build failed without expanding the debug message
-								string trimmedOutput = output.TrimStart('\r', '\n');
+								// ReSharper disable once RedundantAssignment
+								string trimmedOutput = (await process.StandardOutput.ReadToEndAsync()).TrimStart('\r', '\n');
 								//This formats the elapsed time as <minutes (short)> minutes and <seconds (long)>.<decimal seconds (short> seconds
 								//e.g. 0min 5.325s => "0 minutes and 5.32 seconds"
-								Debug.Log($"\t\tBuilt {fileInfo.Name} in {stopwatch.Elapsed:m\\:ss}. Output was: {trimmedOutput}");
+								if (!Silent)
+									Debug.Log($"\t\tBuilt {fileInfo.Name} in {stopwatch.Elapsed:m\\:ss}. Output was: {trimmedOutput}");
 								process.Dispose();
 							}
 						}
@@ -148,12 +154,13 @@ namespace LibEternal.Unity.Editor
 
 				if (libraryGroup.libraries is null || libraryGroup.libraries.Length == 0)
 				{
-					Debug.LogWarning(
-						$"\tWarning: No libraries to import for group {libraryGroup.name}. Did you forget to set them in the inspector?");
+					if (!Silent)
+						Debug.LogWarning(
+							$"\tWarning: No libraries to import for group {libraryGroup.name}. Did you forget to set them in the inspector?");
 				}
 				else
 				{
-					if (PrintExtendedInfo)
+					if (PrintExtendedInfo && !Silent)
 						Debug.Log($"\tImporting library group {libraryGroup.name}");
 					for (int i = 0; i < libraryGroup.libraries.Length; i++)
 					{
@@ -162,7 +169,8 @@ namespace LibEternal.Unity.Editor
 						//Checks to ensure nothing errors out
 						if (!IsValidFilename(compiledLibrary.sourceLocation.filePath))
 						{
-							Debug.LogWarning($"\t\tWarning: Invalid source file selected for library at index [{i}] ");
+							if (!Silent)
+								Debug.LogWarning($"\t\tWarning: Invalid source file selected for library at index [{i}] ");
 							continue;
 						}
 
@@ -172,7 +180,7 @@ namespace LibEternal.Unity.Editor
 							continue;
 						}
 
-						if (PrintExtendedInfo)
+						if (PrintExtendedInfo && !Silent)
 							Debug.Log(
 								$"\t\tCopying binary from {compiledLibrary.sourceLocation.filePath} to {compiledLibrary.assetDestination.filePath}");
 						File.Copy(compiledLibrary.sourceLocation.filePath, compiledLibrary.assetDestination.filePath, true);
@@ -180,15 +188,17 @@ namespace LibEternal.Unity.Editor
 						//Can't import a group at a time, so import as we go
 						AssetDatabase.ImportAsset(compiledLibrary.assetDestination.filePath,
 							ImportAssetOptions.ForceUpdate | ImportAssetOptions.DontDownloadFromCacheServer);
-						Debug.Log($"\t\tImported binary \"{compiledLibrary.assetDestination.CachedFileInfo.Value.Name}\"");
+						if (!Silent)
+							Debug.Log($"\t\tImported binary \"{compiledLibrary.assetDestination.CachedFileInfo.Value.Name}\"");
 					}
 
-					if (PrintExtendedInfo)
+					if (PrintExtendedInfo && !Silent)
 						Debug.Log($"\tFinished importing library group {libraryGroup.name}");
 				}
 			}
 
-			Debug.Log("Finished compiling all library groups");
+			if (!Silent)
+				Debug.Log("Finished compiling all library groups");
 		}
 	}
 }
