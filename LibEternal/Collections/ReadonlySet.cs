@@ -7,38 +7,38 @@ namespace LibEternal.Collections
 	/// <summary>Wrapper for a <see cref="HashSet{T}" /> which allows only for lookup.</summary>
 	/// <typeparam name="T">Type of items in the set.</typeparam>
 	// ReSharper disable once ClassCanBeSealed.Global
-	public class ReadonlyHashSet<T> : IReadonlySet<T>
+	public class ReadonlySet<T> : IReadonlySet<T>
 	{
 		/// <summary>
-		///     The backing field for this <see cref="ReadonlyHashSet{T}" />
+		///     The backing field for this <see cref="ReadonlySet{T}" />
 		/// </summary>
-		private readonly HashSet<T> hashSet;
+		private readonly ISet<T> set;
 
-		/// <summary>Creates new wrapper instance for given hash set.</summary>
-		public ReadonlyHashSet(HashSet<T> set)
+		/// <summary>Creates new wrapper instance for given set.</summary>
+		public ReadonlySet(ISet<T> set)
 		{
-			hashSet = set;
+			this.set = set;
 		}
 
 		/// <inheritdoc />
-		public int Count => hashSet.Count;
+		public int Count => set.Count;
 
 		/// <inheritdoc />
 		public bool Contains(T i)
 		{
-			return hashSet.Contains(i);
+			return set.Contains(i);
 		}
 
 		/// <inheritdoc />
 		public IEnumerator<T> GetEnumerator()
 		{
-			return hashSet.GetEnumerator();
+			return set.GetEnumerator();
 		}
 
 		/// <inheritdoc />
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			return hashSet.GetEnumerator();
+			return set.GetEnumerator();
 		}
 	}
 }

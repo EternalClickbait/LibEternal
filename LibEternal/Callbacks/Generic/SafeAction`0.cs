@@ -27,8 +27,10 @@ namespace LibEternal.Callbacks.Generic
 			remove => callbacks.Remove(value);
 		}
 		
-		//TODO: Add some docs to this
-		public readonly ReadonlyHashSet<Action> Callbacks;
+		/// <summary>
+		///     A readonly wrapper around the set of callbacks, to allow read-only access
+		/// </summary>
+		public readonly ReadonlySet<Action> Callbacks;
 		
 		/// <summary>
 		///     The constructor to instantiate a new <see cref="SafeAction" />
@@ -39,8 +41,8 @@ namespace LibEternal.Callbacks.Generic
 		    // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
 		    if(callbacks is null) this.callbacks = new HashSet<Action>();
 		    else this.callbacks = new HashSet<Action>(callbacks);
-		    //Initialize the ReadonlyHashSet field using our newly made HashSet
-		    Callbacks = new ReadonlyHashSet<Action>(this.callbacks);
+		    //Initialize the ReadonlySet field using our newly made HashSet
+		    Callbacks = new ReadonlySet<Action>(this.callbacks);
 		}
 		
 		

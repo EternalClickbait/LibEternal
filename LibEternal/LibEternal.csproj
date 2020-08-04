@@ -42,11 +42,7 @@
         <DesignTime>True</DesignTime>
         <DependentUpon>Main.tt</DependentUpon>
       </Compile>
-      <Compile Update="Callbacks\Generic\SafeAction.cs">
-        <AutoGen>True</AutoGen>
-        <DesignTime>True</DesignTime>
-        <DependentUpon>SafeAction.tt</DependentUpon>
-      </Compile>
+      <Compile Remove="Callbacks\Generic\SafeAction.cs" />
     </ItemGroup>
 
 </Project>

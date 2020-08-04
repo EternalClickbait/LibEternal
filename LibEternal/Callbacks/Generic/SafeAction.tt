@@ -89,8 +89,10 @@ public event <#=baseCallbackTypeName #> Event
 	remove => callbacks.Remove(value);
 }
 
-//TODO: Add some docs to this
-public readonly ReadonlyHashSet<<#= baseCallbackTypeName#>> Callbacks;
+/// <summary>
+///     A readonly wrapper around the set of callbacks, to allow read-only access
+/// </summary>
+public readonly ReadonlySet<<#= baseCallbackTypeName#>> Callbacks;
 
 <#+
 
@@ -104,8 +106,8 @@ public <#= NonGenericTypeName #>([CanBeNull] IEnumerable<<#=baseCallbackTypeName
     // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
     if(callbacks is null) this.callbacks = new HashSet<<#=baseCallbackTypeName #>>();
     else this.callbacks = new HashSet<<#=baseCallbackTypeName #>>(callbacks);
-    //Initialize the ReadonlyHashSet field using our newly made HashSet
-    Callbacks = new ReadonlyHashSet<<#= baseCallbackTypeName#>>(this.callbacks);
+    //Initialize the ReadonlySet field using our newly made HashSet
+    Callbacks = new ReadonlySet<<#= baseCallbackTypeName#>>(this.callbacks);
 }
 
 <#+
