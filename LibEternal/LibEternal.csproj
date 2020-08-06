@@ -1,0 +1,59 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <LangVersion>8</LangVersion>
+        <Nullable>disable</Nullable>
+        <IsPackable>false</IsPackable>
+        <AssemblyVersion>1.0.0.1</AssemblyVersion>
+        <FileVersion>1.0.0.1</FileVersion>
+        <TargetFramework>netstandard2.1</TargetFramework>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+      <DefineConstants>TRACE</DefineConstants>
+      <DebugType>full</DebugType>
+      <DocumentationFile>bin\Debug\LibEternal.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+      <DefineConstants />
+      <DocumentationFile>bin\Release\LibEternal.xml</DocumentationFile>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Serilog" Version="2.9.0" />
+      <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="Callbacks\Generic\Main.tt">
+        <Generator>TextTemplatingFileGenerator</Generator>
+        <LastGenOutput>Main.cs</LastGenOutput>
+      </None>
+      <None Update="Callbacks\Generic\SafeAction.tt">
+        <Generator>TextTemplatingFileGenerator</Generator>
+        <LastGenOutput>SafeAction.cs</LastGenOutput>
+      </None>
+      <None Update="Callbacks\Generic\SafeFunc.tt">
+        <Generator>TextTemplatingFileGenerator</Generator>
+        <LastGenOutput>SafeFunc.cs</LastGenOutput>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Update="Callbacks\Generic\Main.cs">
+        <AutoGen>True</AutoGen>
+        <DesignTime>True</DesignTime>
+        <DependentUpon>Main.tt</DependentUpon>
+      </Compile>
+      <Compile Update="Callbacks\Generic\SafeFunc.cs">
+        <DependentUpon>SafeFunc.tt</DependentUpon>
+      </Compile>
+      <Compile Update="Callbacks\Generic\SafeAction.cs">
+        <AutoGen>True</AutoGen>
+        <DesignTime>True</DesignTime>
+        <DependentUpon>SafeAction.tt</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+</Project>
