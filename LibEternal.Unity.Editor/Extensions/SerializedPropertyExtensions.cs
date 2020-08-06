@@ -65,6 +65,7 @@ namespace LibEternal.Unity.Editor.Extensions
 					string fieldName;
 					//If the path doesn't contain a '.', we're on the 2nd last object (so this should assign the final field)
 					//Without this check, Path.IndexOf() returns -1, which then makes Substring() fail
+					// ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
 					if (!path.Contains("."))
 						fieldName = path;
 					else

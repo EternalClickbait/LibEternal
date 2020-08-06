@@ -20,11 +20,17 @@ namespace LibEternal.Helper
 		// Variables
 		private readonly StringDictionary parameters;
 
+		/// <summary>
+		///     Constructs a new <see cref="ArgumentParser" />, using the environment's command line arguments
+		/// </summary>
 		public ArgumentParser() : this(Environment.GetCommandLineArgs())
 		{
 		}
 
-		// Constructor
+		/// <summary>
+		///     Constructs a new <see cref="ArgumentParser" />, using the passed in arguments.
+		/// </summary>
+		/// <param name="args">The list of arguments to parse</param>
 		public ArgumentParser([NotNull] IReadOnlyList<string> args)
 		{
 			parameters = new StringDictionary();
@@ -108,8 +114,10 @@ namespace LibEternal.Helper
 				parameters.Add(parameter, "true");
 		}
 
-		// Retrieve a parameter value if it exists 
-		// (overriding C# indexer property)
+		/// <summary>
+		///     Retrieves the parameter value if it exists
+		/// </summary>
+		/// <param name="param">The name of the parameter to fetch</param>
 		public string this[[NotNull] string param] => parameters[param];
 
 		/// <summary>

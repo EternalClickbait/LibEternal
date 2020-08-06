@@ -3,6 +3,8 @@ using System;
 
 namespace LibEternal.Helper
 {
+	//URGENT: Need to be able to dispose of old value somehow
+#error Add dispose of old value
 	/// <summary>
 	///     A class used for caching a value and easily updating it.
 	/// </summary>

@@ -24,8 +24,7 @@
 	private static string MakeXmlSafe(string str)
 	{
 		return str.Replace('<', '{').Replace('>', '}');
-	}
-#>
+	}#>
 
 <#+
 	private void Create(int numTypeArgs)
@@ -179,8 +178,7 @@ public (List<Exception> Exceptions, List<TReturn> Results) InvokeSafe(<#= inputP
 }<#+
 		//Save the output
 		SaveOutput(string.Format(OutputFileFormat, numTypeArgs));
-	}
-#>
+	}#>
 
 <#+
 		//Save Output function
@@ -191,5 +189,4 @@ public (List<Exception> Exceptions, List<TReturn> Results) InvokeSafe(<#= inputP
 		string outputFilePath = Path.Combine(templateDirectory!, outputFileName);
 		File.WriteAllText(outputFilePath, GenerationEnvironment.ToString());
 		GenerationEnvironment.Remove(0, GenerationEnvironment.Length);
-	}
-#>
+	}#>

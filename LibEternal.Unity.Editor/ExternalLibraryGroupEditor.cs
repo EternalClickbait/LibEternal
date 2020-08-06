@@ -45,9 +45,9 @@ namespace LibEternal.Unity.Editor
 		}
 
 		/// <summary>
-		/// 	Compiles and imports a single <see cref="ExternalLibraryGroup"/>
+		///     Compiles and imports a single <see cref="ExternalLibraryGroup" />
 		/// </summary>
-		/// <param name="libraryGroup">The <see cref="ExternalLibraryGroup"/> to compile and import</param>
+		/// <param name="libraryGroup">The <see cref="ExternalLibraryGroup" /> to compile and import</param>
 		/// <returns></returns>
 		// ReSharper disable once MemberCanBePrivate.Global
 		public static async Task Recompile(ExternalLibraryGroup libraryGroup)

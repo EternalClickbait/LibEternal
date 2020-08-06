@@ -4,6 +4,9 @@ using System;
 namespace LibEternal.Extensions
 {
 	//Got this from https://stackoverflow.com/a/13095144
+	/// <summary>
+	///     An extension class for the <see cref="System" />.<see cref="Random" /> random number generator class
+	/// </summary>
 	[PublicAPI]
 	public static class RandomExtensions
 	{

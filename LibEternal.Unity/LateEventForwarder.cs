@@ -2,10 +2,12 @@
 using System;
 using UnityEngine;
 
+#pragma warning disable 1591
+
 namespace LibEternal.Unity
 {
 	[DefaultExecutionOrder(1000)]
-	public class LateEventForwarder : MonoBehaviour
+	public sealed class LateEventForwarder : MonoBehaviour
 	{
 		private void FixedUpdate()
 		{

@@ -21,7 +21,7 @@ namespace LibEternal.Unity.Editor
 		private const BindingFlags Flags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
 
 		/// <summary>
-		/// A list of all methods we found
+		///     A list of all methods we found
 		/// </summary>
 		private readonly List<MethodInfo> staticMethods = new List<MethodInfo>(100);
 
@@ -32,7 +32,7 @@ namespace LibEternal.Unity.Editor
 		private bool shortView;
 
 		/// <summary>
-		/// The default public constructor
+		///     The default public constructor
 		/// </summary>
 		public StaticMethodInvokerEditor()
 		{

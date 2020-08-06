@@ -1,6 +1,8 @@
 using LibEternal.JetBrains.Annotations;
 using UnityEngine;
 
+#pragma warning disable 1591
+
 namespace LibEternal.Unity
 {
 	[PublicAPI]
@@ -17,10 +19,7 @@ namespace LibEternal.Unity
 			T[] instances = Object.FindObjectsOfType<T>();
 			if (instances.Length != 0)
 				Debug.LogWarning($"Instances of {typeof(T).Name} detected. Destroying...");
-			for (int i = 0; i < instances.Length; i++)
-			{
-				Object.Destroy(instances[i]);
-			}
+			for (int i = 0; i < instances.Length; i++) Object.Destroy(instances[i]);
 
 			Object.DontDestroyOnLoad(
 				new GameObject(typeof(T).Name)

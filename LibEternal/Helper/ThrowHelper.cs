@@ -3,22 +3,24 @@ using System;
 
 namespace LibEternal.Helper
 {
+	/// <summary>
+	///     A class that contains functions to assist with throwing <see cref="Exception" />s
+	/// </summary>
 	[PublicAPI]
 	public static class ThrowHelper
 	{
-		public static void CheckRange(int val, int min, int max)
+		/// <summary>
+		///     Validates the input <paramref name="value" />, the ensure it is within the range of <paramref name="min" /> to <paramref name="max" />
+		/// </summary>
+		/// <param name="value">The value to validate</param>
+		/// <param name="min">The minimum value allowed for the <paramref name="value" /></param>
+		/// <param name="max">The maximum value allowed for the <paramref name="value" /></param>
+		/// <exception cref="ArgumentOutOfRangeException">Thrown if the <paramref name="value" /> is out of range</exception>
+		public static void CheckRange(int value, int min, int max)
 		{
-			if (val < min || val > max)
-				throw new ArgumentOutOfRangeException(nameof(val), val,
-					$"Value {val} was out of valid range {min} to {max}");
-		}
-
-		public static void CheckRange<T>([NotNull] T val, T min, T max) where T : IComparable<T>
-		{
-			//If val goes before min or after max(when in ascending order)
-			if (val.CompareTo(min) < 0 || val.CompareTo(max) > 0)
-				throw new ArgumentOutOfRangeException(nameof(val), val,
-					$"Value {val} was out of valid range {min} to {max}");
+			if (value < min || value > max)
+				throw new ArgumentOutOfRangeException(nameof(value), value,
+					$"Value {value} was out of valid range {min} to {max}");
 		}
 	}
 }

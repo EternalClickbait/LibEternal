@@ -1,9 +1,13 @@
-﻿using System.Collections;
+﻿using LibEternal.JetBrains.Annotations;
+using System.Collections;
 using UnityEngine;
+
+#pragma warning disable 1591
 
 namespace LibEternal.Unity
 {
-	public class ThreadSafeTime : MonoBehaviour
+	[PublicAPI]
+	public sealed class ThreadSafeTime : MonoBehaviour
 	{
 		//Update every 1 ms. Use a cached wait to avoid allocating every time. (Only 20b/update but better safe than sorry) 
 		private static readonly WaitForSeconds Wait = new WaitForSeconds(0.001f);
@@ -14,6 +18,7 @@ namespace LibEternal.Unity
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 		private static void CreateInstance()
 		{
+			// ReSharper disable once CommentTypo
 			// DontDestroyOnLoad(
 			// new GameObject(nameof(ThreadSafeTime))
 			// .AddComponent<ThreadSafeTime>());

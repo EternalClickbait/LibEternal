@@ -96,7 +96,7 @@ public event <#=baseCallbackTypeName #> Event
 /// <summary>
 ///     A readonly wrapper around the set of callbacks, to allow read-only access
 /// </summary>
-public readonly ReadonlySet<<#= baseCallbackTypeName#>> Callbacks;
+public readonly ReadonlySet<<#= baseCallbackTypeName #>> Callbacks;
 
 <#+
 
@@ -111,7 +111,7 @@ public <#= NonGenericTypeName #>([CanBeNull] IEnumerable<<#=baseCallbackTypeName
     if(callbacks is null) this.callbacks = new HashSet<<#=baseCallbackTypeName #>>();
     else this.callbacks = new HashSet<<#=baseCallbackTypeName #>>(callbacks);
     //Initialize the ReadonlySet field using our newly made HashSet
-    Callbacks = new ReadonlySet<<#= baseCallbackTypeName#>>(this.callbacks);
+    Callbacks = new ReadonlySet<<#= baseCallbackTypeName #>>(this.callbacks);
 }
 
 <#+

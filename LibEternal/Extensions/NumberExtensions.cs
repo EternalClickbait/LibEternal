@@ -7,6 +7,7 @@ namespace LibEternal.Extensions
 	/// <summary>
 	///     A class of extensions methods for numerical values
 	/// </summary>
+	[PublicAPI]
 	public static class NumberExtensions
 	{
 		/// <summary>

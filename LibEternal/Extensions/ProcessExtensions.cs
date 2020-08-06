@@ -6,7 +6,10 @@ using System.Threading.Tasks;
 
 namespace LibEternal.Extensions
 {
-	[UsedImplicitly]
+	/// <summary>
+	///     An extension class for a <see cref="Process" />
+	/// </summary>
+	[PublicAPI]
 	public static class ProcessExtensions
 	{
 		/// <summary>
@@ -31,7 +34,7 @@ namespace LibEternal.Extensions
 			{
 				if (process.HasExited) return;
 
-				using (cancellationToken.Register(() => tcs.TrySetCanceled()))
+				await using (cancellationToken.Register(() => tcs.TrySetCanceled()))
 				{
 					await tcs.Task.ConfigureAwait(false);
 				}

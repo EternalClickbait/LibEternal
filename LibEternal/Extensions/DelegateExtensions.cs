@@ -48,7 +48,8 @@ namespace LibEternal.Extensions
 		///     An optional function returning a <see cref="bool" /> to be called whenever an exception is thrown. If it returns
 		///     <see langword="true" />, the loop ends and no more actions are invoked.
 		/// </param>
-		public static void InvokeCatchingErrors<TParam>([NotNull] this Action<TParam> thisAction, TParam param, [CanBeNull] Func<Exception, bool> onError = null)
+		public static void InvokeCatchingErrors<TParam>([NotNull] this Action<TParam> thisAction, TParam param,
+		                                                [CanBeNull] Func<Exception, bool> onError = null)
 		{
 			foreach (Delegate del in thisAction.GetInvocationList())
 				try

@@ -2,9 +2,12 @@
 using System;
 using UnityEngine;
 
+#pragma warning disable 1591
+
 namespace LibEternal.Unity
 {
-	[DefaultExecutionOrder(-1000), PublicAPI]
+	[DefaultExecutionOrder(-1000)]
+	[PublicAPI]
 	public class EventForwarder : MonoBehaviour
 	{
 		private EventForwarder()
@@ -26,6 +29,7 @@ namespace LibEternal.Unity
 		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
 		private static void CreateInstance()
 		{
+			// ReSharper disable once CommentTypo
 			// DontDestroyOnLoad(
 			// new GameObject(nameof(EventForwarder))
 			// .AddComponent<EventForwarder>());

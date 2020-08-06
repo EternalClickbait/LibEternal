@@ -2,7 +2,9 @@ using LibEternal.JetBrains.Annotations;
 using System;
 using UnityEngine;
 
-// ReSharper disable CompareOfFloatsByEqualityOperator
+#pragma warning disable 1591
+
+// ReSharper disable all
 
 namespace LibEternal.Unity
 {

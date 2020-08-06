@@ -4,6 +4,9 @@ using System.Text.RegularExpressions;
 
 namespace LibEternal.Extensions
 {
+	/// <summary>
+	///     An extension class for <see cref="System.IO" /> related operations
+	/// </summary>
 	[PublicAPI]
 	public class IoExtensions
 	{

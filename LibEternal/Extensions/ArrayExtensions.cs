@@ -4,6 +4,9 @@ using System.Text;
 
 namespace LibEternal.Extensions
 {
+	/// <summary>
+	///     An extension class for arrays.
+	/// </summary>
 	[PublicAPI]
 	public static class ArrayExtensions
 	{
@@ -26,8 +29,7 @@ namespace LibEternal.Extensions
 			if (array1.Length != array2.Length)
 				return false;
 
-			if (comparer == null)
-				comparer = EqualityComparer<T>.Default;
+			comparer ??= EqualityComparer<T>.Default;
 
 			for (int i = 0; i < array1.Length; i++)
 				if (!comparer.Equals(array1[i], array2[i]))
@@ -41,7 +43,7 @@ namespace LibEternal.Extensions
 		///     <see cref="System.Array" />
 		/// </summary>
 		/// <param name="str">The input <see cref="string" /> to encode</param>
-		/// <returns></returns>
+		/// <returns>A byte representation of the input string, encoded as UTF8</returns>
 		[NotNull]
 		public static byte[] ToUtf8([NotNull] this string str)
 		{
@@ -53,7 +55,7 @@ namespace LibEternal.Extensions
 		///     <see cref="Encoding" />.
 		/// </summary>
 		/// <param name="b">The input <see cref="System.Array" /> to decode</param>
-		/// <returns></returns>
+		/// <returns>The string version of the UTF8 encoded input bytes</returns>
 		[NotNull]
 		public static string FromUtf8([NotNull] this byte[] b)
 		{
