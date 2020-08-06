@@ -1,4 +1,5 @@
 ﻿using LibEternal.JetBrains.Annotations;
+using System;
 using System.IO;
 using System.Text.RegularExpressions;
 
@@ -22,10 +23,10 @@ namespace LibEternal.Extensions
 		public static bool IsValidFilename([CanBeNull] string fileName)
 		{
 			if (string.IsNullOrWhiteSpace(fileName)) return false;
+			//Check file length (https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file#maximum-path-length-limitation)
+			if (fileName.Length > 260) return false;
 			//From https://stackoverflow.com/a/62855/
 			return !InvalidFilePathChars.IsMatch(fileName);
-
-			//TODO: Add other checks for UNC, drive-path format, etc
 		}
 	}
 }
