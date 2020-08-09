@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using UnityEditor;
-using UnityEditor.Callbacks;
 using UnityEngine;
 using static LibEternal.Extensions.IoExtensions;
 using Debug = UnityEngine.Debug;

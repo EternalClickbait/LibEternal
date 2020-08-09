@@ -1,8 +1,10 @@
-﻿using Serilog;
+﻿using LibEternal.Helper;
+using Serilog;
 using Serilog.Enrichers;
 using Serilog.Exceptions;
 using System;
 using System.Text;
+using System.Threading;
 
 namespace LibEternal.Testing
 {
@@ -46,6 +48,8 @@ namespace LibEternal.Testing
 				case LogLevelMode.Tiny:
 					builder.Append("{Level:t3}]");
 					break;
+				default:
+					throw new ArgumentOutOfRangeException(nameof(logLevelMode), logLevelMode, null);
 			}
 
 			builder.Append(" [{ThreadName} (ID {ThreadId})]\t");
@@ -73,22 +77,12 @@ namespace LibEternal.Testing
 				.Enrich.WithExceptionDetails()
 				.CreateLogger();
 
-			const string msg = "TEST";
-
 			for (int i = 0; i < 3; i++)
 			{
-				Log.Fatal(msg);
-				Log.Error(msg);
-				Log.Warning(msg);
-				Log.Information(msg);
-				Log.Debug(msg);
-				Log.Verbose(msg);
-
-				Log.Information(new Exception("Yeet", new NullReferenceException("Internal exception")), "");
-				Log.Information(new Exception("Yeet", new NullReferenceException("Internal exception")), "");
+				Thread.CurrentThread.Rename($"Name at iteration {i}");
+				Log.Information("Iteration {Index}: {ThreadName}", i, Thread.CurrentThread.Name);
 			}
-
-
+			
 			Log.CloseAndFlush();
 		}
 
