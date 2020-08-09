@@ -191,7 +191,6 @@ namespace LibEternal.Unity.Editor
 		/// <summary>
 		///     Compiles all external libraries and imports them
 		/// </summary>
-		[DidReloadScripts]
 		[MenuItem("Assets/Recompile External Libraries")]
 		public static async void RecompileAll()
 		{
