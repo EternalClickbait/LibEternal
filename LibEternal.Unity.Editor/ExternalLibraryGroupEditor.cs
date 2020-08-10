@@ -28,7 +28,7 @@ namespace LibEternal.Unity.Editor
 		/// <summary>
 		///     Set this to true to not print any messages at all
 		/// </summary>
-		private const bool Silent = true;
+		private const bool Silent = false;
 
 		/// <inheritdoc />
 		public override void OnInspectorGUI()
