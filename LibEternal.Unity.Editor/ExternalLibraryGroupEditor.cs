@@ -7,6 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using static LibEternal.Extensions.IoExtensions;
 using Debug = UnityEngine.Debug;
+// ReSharper disable RedundantLogicalConditionalExpressionOperand
 
 // ReSharper disable ConditionIsAlwaysTrueOrFalse
 // ReSharper disable HeuristicUnreachableCode

@@ -61,8 +61,4 @@
       <PackageReference Include="SerilogTimings" Version="2.3.0" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Logging" />
-    </ItemGroup>
-
 </Project>
