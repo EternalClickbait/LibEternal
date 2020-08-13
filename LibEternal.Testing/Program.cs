@@ -10,6 +10,7 @@ namespace LibEternal.Testing
 {
 	internal static class Program
 	{
+		//TODO: Unit tests!
 		private static string BuildOutputTemplate(TimeStampMode timeStampMode, LogLevelMode logLevelMode = LogLevelMode.Full,
 		                                          bool includeProperties = false)
 		{
@@ -77,12 +78,23 @@ namespace LibEternal.Testing
 				.Enrich.WithExceptionDetails()
 				.CreateLogger();
 
-			for (int i = 0; i < 3; i++)
-			{
-				Thread.CurrentThread.Rename($"Name at iteration {i}");
-				Log.Information("Iteration {Index}: {ThreadName}", i, Thread.CurrentThread.Name);
-			}
+			Log.Information("Both Should Be Null");
+			Log.Information("True: {TrueThreadName}, Custom: {CustomThreadName}", Thread.CurrentThread.Name, Thread.CurrentThread.GetThreadName());
+
+			Thread.CurrentThread.Name = "True Thread Name";
+			Log.Information("Custom should be null");
+			Log.Information("True: {TrueThreadName}, Custom: {CustomThreadName}", Thread.CurrentThread.Name, Thread.CurrentThread.GetThreadName());
 			
+			Thread.CurrentThread.SetThreadName("Custom Thread Name");
+			Log.Information("Neither should be null");
+			Log.Information("True: {TrueThreadName}, Custom: {CustomThreadName}", Thread.CurrentThread.Name, Thread.CurrentThread.GetThreadName());
+			
+			// for (int i = 0; i < 3; i++)
+			// {
+				// Thread.CurrentThread($"Name at iteration {i}");
+				// Log.Information("Iteration {Index}: {ThreadName}", i, Thread.CurrentThread.Name);
+			// }
+
 			Log.CloseAndFlush();
 		}
 
