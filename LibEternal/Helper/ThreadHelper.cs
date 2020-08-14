@@ -12,7 +12,8 @@ namespace LibEternal.Helper
 		
 		public static string GetThreadName(this Thread thread)
 		{
-			return ThreadNames.GetValueOrDefault(thread);
+			ThreadNames.TryGetValue(thread, out string s);
+			return s;
 		}
 		
 		public static void SetThreadName(this Thread thread, string name) => ThreadNames[thread] = name;

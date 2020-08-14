@@ -34,7 +34,7 @@ namespace LibEternal.Extensions
 			{
 				if (process.HasExited) return;
 
-				await using (cancellationToken.Register(() => tcs.TrySetCanceled()))
+				using (cancellationToken.Register(() => tcs.TrySetCanceled()))
 				{
 					await tcs.Task.ConfigureAwait(false);
 				}
