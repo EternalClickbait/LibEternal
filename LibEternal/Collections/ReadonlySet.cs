@@ -63,10 +63,28 @@ namespace LibEternal.Collections
 			return set.Contains(i);
 		}
 
-		//TODO: Should add support for this soon
+		//TODO: Should add support for this soon, and tests
 		/// <inheritdoc />
-		public void CopyTo(T[] array, int arrayIndex)
+		public void CopyTo(T[] array, int startIndex)
 		{
+			//Validate the inputs
+			if (array == null)
+				throw new ArgumentNullException(nameof (array));
+			if (startIndex < 0)
+				throw new ArgumentOutOfRangeException(nameof (startIndex), startIndex, "A non-negative input index must be supplied");
+			//Make sure that the target array isn't too small
+			if (startIndex > array.Length)
+				throw new ArgumentException("The input array is not large enough", nameof(array));
+			//Ensure that once we offset it's big enough
+			if(set.Count > array.Length - startIndex)
+				throw new ArgumentException("The input array after the index is not large enough", nameof(array));
+			//Loop over all the elements in this set
+			int offsetIndex = startIndex;
+			foreach (T value in set)
+			{
+				array[offsetIndex] = value;
+				offsetIndex++;
+			}
 			throw new NotImplementedException();
 		}
 
