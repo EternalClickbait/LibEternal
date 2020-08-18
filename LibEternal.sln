@@ -8,7 +8,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibEternal.Unity.Editor", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibEternal.Testing", "LibEternal.Testing\LibEternal.Testing.csproj", "{1E8CD2C8-8749-4EED-9076-7C5EA8490454}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibEternal.Tests", "LibEternal.Tests\LibEternal.Tests.csproj", "{609C6E8B-0496-4D49-815E-44C15515E860}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LibEternal.Tests", "LibEternal.Tests\LibEternal.Tests.csproj", "{A626CDB9-C72E-4C62-BA59-145EFEE859D7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -32,9 +32,9 @@ Global
 		{1E8CD2C8-8749-4EED-9076-7C5EA8490454}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1E8CD2C8-8749-4EED-9076-7C5EA8490454}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1E8CD2C8-8749-4EED-9076-7C5EA8490454}.Release|Any CPU.Build.0 = Release|Any CPU
-		{609C6E8B-0496-4D49-815E-44C15515E860}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{609C6E8B-0496-4D49-815E-44C15515E860}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{609C6E8B-0496-4D49-815E-44C15515E860}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{609C6E8B-0496-4D49-815E-44C15515E860}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A626CDB9-C72E-4C62-BA59-145EFEE859D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A626CDB9-C72E-4C62-BA59-145EFEE859D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A626CDB9-C72E-4C62-BA59-145EFEE859D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A626CDB9-C72E-4C62-BA59-145EFEE859D7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
