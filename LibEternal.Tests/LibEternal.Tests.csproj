@@ -14,6 +14,9 @@
         <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
         <FileAlignment>512</FileAlignment>
     </PropertyGroup>
+    <PropertyGroup>
+        <LangVersion>8</LangVersion>
+    </PropertyGroup>
     <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
         <PlatformTarget>AnyCPU</PlatformTarget>
         <DebugSymbols>true</DebugSymbols>
@@ -44,11 +47,18 @@
         <Reference Include="System.Xml" />
     </ItemGroup>
     <ItemGroup>
-        <Compile Include="Collections\Generic\Tests.cs" />
+        <Compile Include="Abstraction\SmartDisposableTests.cs" />
+        <Compile Include="Callbacks\SafeActionTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
       <None Include="packages.config" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\LibEternal\LibEternal.csproj">
+        <Project>{77cdcd9c-1d4a-43a4-9262-d6ff3b25b33b}</Project>
+        <Name>LibEternal</Name>
+      </ProjectReference>
     </ItemGroup>
     <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
     <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

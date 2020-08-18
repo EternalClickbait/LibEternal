@@ -12,7 +12,7 @@ namespace LibEternal.Abstraction
 		/// <summary>
 		///     If this object has already been disposed
 		/// </summary>
-		protected bool Disposed = false;
+		protected internal bool Disposed = false;
 
 		/// <summary>
 		///     Disposes of the <see cref="SmartDisposable" />. Note that if the object has already been disposed, calling this method will do nothing
@@ -37,7 +37,7 @@ namespace LibEternal.Abstraction
 		///     Throws an <see cref="ObjectDisposedException" /> if the object has already been <see cref="Disposed" />.
 		/// </summary>
 		/// <exception cref="ObjectDisposedException">The exception thrown if the object is disposed</exception>
-		protected void ThrowIfDisposed()
+		protected internal void ThrowIfDisposed()
 		{
 			if (Disposed) throw new ObjectDisposedException(ToString(), $"Cannot access a disposed {GetType().FullName}");
 		}
