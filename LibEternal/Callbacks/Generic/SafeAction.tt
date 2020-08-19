@@ -160,7 +160,8 @@ public List<Exception> InvokeSafe(<#= inputParams #>)
 	{
 		try
 		{
-			callback?.Invoke(<#= callbackParams #>);
+            if(callback is null) continue;
+            callback.Invoke(<#= callbackParams #>);
 		}
 		//Called if there's an exception in one of the callbacks
 		catch (Exception e)

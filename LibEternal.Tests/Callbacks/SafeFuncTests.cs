@@ -50,6 +50,7 @@ namespace LibEternal.Tests.Callbacks
 			const int returnVal = 0x12345678;
 			Exception exception = new Exception("Dummy Exception");
 			//One function should throw, the other should do return default
+			// ReSharper disable once IdentifierTypo
 			Func<int>[] funcs = {() => throw exception, () => returnVal};
 
 			SafeFunc<int> safeFunc = new SafeFunc<int>(funcs);
