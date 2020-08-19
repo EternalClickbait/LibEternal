@@ -1,9 +1,14 @@
 ﻿using LibEternal.Callbacks.Generic;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 
 namespace LibEternal.Tests.Callbacks
 {
+	//We don't need to create a separate test class for each SafeAction generic,
+	//because they are all created using the same template, so the code should be identical
 	[TestFixture]
 	public class SafeActionTests
 	{
@@ -16,19 +21,41 @@ namespace LibEternal.Tests.Callbacks
 		}
 
 		[Test]
-		public void EventOperator_AddsToCallbacks()
+		public void EventOperator_AddsOrRemovesCallbacks()
 		{
 			SafeAction safeAction = new SafeAction();
 			//Shouldn't be any callbacks yet
-			Assert.IsEmpty(safeAction.Callbacks);
+			CollectionAssert.IsEmpty(safeAction.Callbacks, "Callbacks is not empty when no objects added");
 
-			//Just some dummy actions
-			Action action1 = () => { _ = 1; };
-			Action action2 = () => { _ = 2; };
-			Action action3 = () => { _ = 3; };
+			//Checking it was added
+			safeAction.Event += DummyAction;
+			CollectionAssert.Contains(safeAction.Callbacks, (Action) DummyAction, "Action not in invocation list, even though it was added");
+			//Checking it was removed
+			safeAction.Event -= DummyAction;
+			CollectionAssert.DoesNotContain(safeAction.Callbacks, (Action) DummyAction, "Action in invocation list after being removed");
 
-			safeAction.Event += action1;
-			Assert.Contains(action1, safeAction.Callbacks);
+			//Should be empty now; everything that was added was removed 
+			CollectionAssert.IsEmpty(safeAction.Callbacks, "Callbacks not empty when all actions removed");
+		}
+
+		[ExcludeFromCodeCoverage]
+		private static void DummyAction()
+		{
+		}
+
+		[Test]
+		public void InvokeSafe_CatchesAndReturnsExceptions()
+		{
+			Exception exception = new Exception("Dummy Exception");
+			//One action should throw, the other should do nothing
+			Action[] actions = {() => throw exception, () => { }};
+
+			SafeAction safeAction = new SafeAction(actions);
+			List<Exception> exceptions = safeAction.InvokeSafe();
+			//We should have a list of exceptions, containing one element
+			Assert.AreEqual(1, exceptions.Count, "Number of caught exceptions is incorrect");
+			//Assert that the exception caught was the correct one
+			Assert.AreEqual(exception, exceptions[0], "The caught exception is not the correct one");
 		}
 	}
 }

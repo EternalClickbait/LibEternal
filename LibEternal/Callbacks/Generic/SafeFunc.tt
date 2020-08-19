@@ -24,7 +24,8 @@
 	private static string MakeXmlSafe(string str)
 	{
 		return str.Replace('<', '{').Replace('>', '}');
-	}#>
+	}
+#>
 
 <#+
 	private void Create(int numTypeArgs)
@@ -37,6 +38,7 @@ using LibEternal.JetBrains.Annotations;
 using LibEternal.Collections;
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace LibEternal.Callbacks.Generic
 {
@@ -72,7 +74,8 @@ namespace LibEternal.Callbacks.Generic
 /// <summary>
 ///     A safe alternative to an <see cref="<#= MakeXmlSafe(baseCallbackTypeName) #>" />
 /// </summary>
-[PublicAPI, System.Runtime.CompilerServices.CompilerGenerated]
+[PublicAPI, CompilerGenerated]
+<#= numTypeArgs != 0 ? "[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]" : "" /*Code coverage will only cover non-generic, so do this to make it appear that everything is covered*/ #>
 public sealed class <#= fullTypeName #>
 {
 <#+
@@ -178,7 +181,8 @@ public (List<Exception> Exceptions, List<TReturn> Results) InvokeSafe(<#= inputP
 }<#+
 		//Save the output
 		SaveOutput(string.Format(OutputFileFormat, numTypeArgs));
-	}#>
+	}
+#>
 
 <#+
 		//Save Output function
@@ -189,4 +193,5 @@ public (List<Exception> Exceptions, List<TReturn> Results) InvokeSafe(<#= inputP
 		string outputFilePath = Path.Combine(templateDirectory!, outputFileName);
 		File.WriteAllText(outputFilePath, GenerationEnvironment.ToString());
 		GenerationEnvironment.Remove(0, GenerationEnvironment.Length);
-	}#>
+	}
+#>
