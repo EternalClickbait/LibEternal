@@ -45,6 +45,15 @@ namespace LibEternal.Tests.Callbacks
 		}
 
 		[Test]
+		public void InvokeSafe_SkipsNullCallbacks()
+		{
+			SafeFunc<int> safeFunc = new SafeFunc<int>();
+			safeFunc.Event += null;
+
+			Assert.DoesNotThrow(() => safeFunc.InvokeSafe());
+		}
+
+		[Test]
 		public void InvokeSafe_CatchesAndReturnsExceptions()
 		{
 			const int returnVal = 0x12345678;

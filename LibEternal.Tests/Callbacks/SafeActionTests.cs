@@ -13,6 +13,15 @@ namespace LibEternal.Tests.Callbacks
 	public class SafeActionTests
 	{
 		[Test]
+		public void InvokeSafe_SkipsNullCallbacks()
+		{
+			SafeAction safeAction = new SafeAction();
+			safeAction.Event += null;
+
+			Assert.DoesNotThrow(() => safeAction.InvokeSafe());
+		}
+
+		[Test]
 		public void Ctor_DoesNotThrow()
 		{
 			Assert.DoesNotThrow(() => _ = new SafeAction());
