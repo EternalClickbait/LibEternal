@@ -1,4 +1,5 @@
-﻿using System;
+﻿using LibEternal.JetBrains.Annotations;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -16,9 +17,9 @@ namespace LibEternal.Collections
 		private readonly ISet<T> set;
 
 		/// <summary>Creates new wrapper instance for given set.</summary>
-		public ReadonlySet(ISet<T> set)
+		public ReadonlySet([NotNull] ISet<T> set)
 		{
-			this.set = set;
+			this.set = set ?? throw new ArgumentNullException(nameof(set));
 		}
 
 		/// <summary>
@@ -28,7 +29,7 @@ namespace LibEternal.Collections
 		[Obsolete("Not Supported", true)]
 		public bool Remove(T item)
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		/// <inheritdoc cref="IReadOnlyCollection{T}.Count" />
@@ -54,7 +55,7 @@ namespace LibEternal.Collections
 		[Obsolete("Not Supported", true)]
 		public void Clear()
 		{
-			throw new NotImplementedException();
+			throw new NotSupportedException();
 		}
 
 		/// <inheritdoc cref="IReadonlySet{T}.Contains" />
@@ -67,25 +68,7 @@ namespace LibEternal.Collections
 		/// <inheritdoc />
 		public void CopyTo(T[] array, int startIndex)
 		{
-			//Validate the inputs
-			if (array == null)
-				throw new ArgumentNullException(nameof (array));
-			if (startIndex < 0)
-				throw new ArgumentOutOfRangeException(nameof (startIndex), startIndex, "A non-negative input index must be supplied");
-			//Make sure that the target array isn't too small
-			if (startIndex > array.Length)
-				throw new ArgumentException("The input array is not large enough", nameof(array));
-			//Ensure that once we offset it's big enough
-			if(set.Count > array.Length - startIndex)
-				throw new ArgumentException("The input array after the index is not large enough", nameof(array));
-			//Loop over all the elements in this set
-			int offsetIndex = startIndex;
-			foreach (T value in set)
-			{
-				array[offsetIndex] = value;
-				offsetIndex++;
-			}
-			throw new NotImplementedException();
+			set.CopyTo(array, startIndex);
 		}
 
 		/// <inheritdoc />
