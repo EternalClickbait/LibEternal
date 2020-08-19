@@ -19,6 +19,7 @@ namespace LibEternal.Tests.Callbacks
 			safeAction.Event += null;
 
 			Assert.DoesNotThrow(() => safeAction.InvokeSafe());
+			Assert.IsEmpty(safeAction.InvokeSafe());
 		}
 
 		[Test]

@@ -51,6 +51,7 @@ namespace LibEternal.Tests.Callbacks
 			safeFunc.Event += null;
 
 			Assert.DoesNotThrow(() => safeFunc.InvokeSafe());
+			Assert.IsEmpty(safeFunc.InvokeSafe().Exceptions);
 		}
 
 		[Test]
