@@ -51,7 +51,7 @@ namespace LibEternal.Unity.Editor.Extensions
 					Type targetObjectClassType = targetObject.GetType();
 					FieldInfo arrayField = targetObjectClassType.GetField(fieldName);
 
-					object[] array = (object[]) arrayField.GetValue(targetObject);
+					var array = (object[]) arrayField.GetValue(targetObject);
 					int index = int.Parse(indexString);
 
 					//Match.Length returns the amount of chars matched

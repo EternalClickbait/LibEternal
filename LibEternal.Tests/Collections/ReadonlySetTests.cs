@@ -21,7 +21,7 @@ namespace LibEternal.Tests.Collections
 		public void NotSupportedFunctions_Throw()
 		{
 			Type type = typeof(ReadonlySet<int>);
-			ReadonlySet<int> set = new ReadonlySet<int>(new HashSet<int>());
+			var set = new ReadonlySet<int>(new HashSet<int>());
 
 			// ReSharper disable PossibleNullReferenceException
 			TargetInvocationException clearException = Assert.Catch<TargetInvocationException>(() =>
@@ -45,8 +45,8 @@ namespace LibEternal.Tests.Collections
 		public void CountProperty_IsAccurate()
 		{
 			const int numTries = 1000;
-			HashSet<int> originalSet = new HashSet<int>(numTries);
-			ReadonlySet<int> readonlySet = new ReadonlySet<int>(originalSet);
+			var originalSet = new HashSet<int>(numTries);
+			var readonlySet = new ReadonlySet<int>(originalSet);
 
 			for (int i = 0; i < numTries; i++)
 			{
@@ -64,8 +64,8 @@ namespace LibEternal.Tests.Collections
 		[Test]
 		public void GetEnumerator_Tests()
 		{
-			HashSet<int> original = new HashSet<int>(Enumerable.Range(0, 1000));
-			ReadonlySet<int> set = new ReadonlySet<int>(original);
+			var original = new HashSet<int>(Enumerable.Range(0, 1000));
+			var set = new ReadonlySet<int>(original);
 			using (IEnumerator<int> enumerator = set.GetEnumerator())
 			{
 				//See if it returns a non-null enumerator
@@ -81,8 +81,8 @@ namespace LibEternal.Tests.Collections
 		{
 			//Half will be tests when the set contains the item, half when it doesn't
 			const int totalIterations = 1000;
-			HashSet<int> original = new HashSet<int>(totalIterations);
-			ReadonlySet<int> readonlySet = new ReadonlySet<int>(original);
+			var original = new HashSet<int>(totalIterations);
+			var readonlySet = new ReadonlySet<int>(original);
 
 			for (int i = 0; i < totalIterations; i++)
 			{
@@ -98,11 +98,11 @@ namespace LibEternal.Tests.Collections
 		{
 			IEnumerable<int> sourceNumbers = Enumerable.Range(0, 1000);
 			
-			HashSet<int> original = new HashSet<int>(sourceNumbers);
-			ReadonlySet<int> readonlySet = new ReadonlySet<int>(original);
+			var original = new HashSet<int>(sourceNumbers);
+			var readonlySet = new ReadonlySet<int>(original);
 			
-			int[] originalResult = new int[original.Count];
-			int[] readonlyResult = new int[original.Count];
+			var originalResult = new int[original.Count];
+			var readonlyResult = new int[original.Count];
 			
 			original.CopyTo(originalResult);
 			readonlySet.CopyTo(readonlyResult, 0);

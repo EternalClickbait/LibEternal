@@ -31,7 +31,7 @@ namespace LibEternal.Extensions
 			ulong ulongRand;
 			do
 			{
-				byte[] buf = new byte[8];
+				var buf = new byte[8];
 				random.NextBytes(buf);
 				ulongRand = (ulong) BitConverter.ToInt64(buf, 0);
 			} while (ulongRand > ulong.MaxValue - (ulong.MaxValue % uRange + 1) % uRange);

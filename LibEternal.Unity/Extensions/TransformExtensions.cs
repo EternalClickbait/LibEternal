@@ -7,7 +7,7 @@ namespace LibEternal.Unity.Extensions
 	{
 		public static List<Transform> GetAllChildren(this Transform transform)
 		{
-			List<Transform> children = new List<Transform>(transform.childCount);
+			var children = new List<Transform>(transform.childCount);
 			for (int i = 0; i < transform.childCount; i++) children.Add(transform.GetChild(i));
 
 			return children;

@@ -23,7 +23,7 @@ namespace LibEternal.Tests.Callbacks
 		[Test]
 		public void EventOperator_AddsOrRemovesCallbacks()
 		{
-			SafeFunc<int> safeFunc = new SafeFunc<int>();
+			var safeFunc = new SafeFunc<int>();
 			//Shouldn't be any callbacks yet
 			CollectionAssert.IsEmpty(safeFunc.Callbacks, "Callbacks is not empty when no objects added");
 
@@ -47,7 +47,7 @@ namespace LibEternal.Tests.Callbacks
 		[Test]
 		public void InvokeSafe_SkipsNullCallbacks()
 		{
-			SafeFunc<int> safeFunc = new SafeFunc<int>();
+			var safeFunc = new SafeFunc<int>();
 			safeFunc.Event += null;
 
 			Assert.DoesNotThrow(() => safeFunc.InvokeSafe());
@@ -63,7 +63,7 @@ namespace LibEternal.Tests.Callbacks
 			// ReSharper disable once IdentifierTypo
 			Func<int>[] funcs = {() => throw exception, () => returnVal};
 
-			SafeFunc<int> safeFunc = new SafeFunc<int>(funcs);
+			var safeFunc = new SafeFunc<int>(funcs);
 			(List<Exception> exceptions, List<int> results) = safeFunc.InvokeSafe();
 
 			//We should have a list of exceptions, containing one element

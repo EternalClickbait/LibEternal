@@ -55,7 +55,7 @@ namespace LibEternal.Extensions
 				try
 				{
 					//Try invoking the next action in the list
-					Action<TParam> action = del as Action<TParam>;
+					var action = del as Action<TParam>;
 					action?.Invoke(param);
 				}
 				catch (Exception e)

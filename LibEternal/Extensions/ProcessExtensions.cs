@@ -20,7 +20,7 @@ namespace LibEternal.Extensions
 		/// <returns>A completed task once the process has exited</returns>
 		public static async Task WaitForExitAsync([NotNull] this Process process, CancellationToken cancellationToken = default)
 		{
-			TaskCompletionSource<bool> tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
+			var tcs = new TaskCompletionSource<bool>(TaskCreationOptions.RunContinuationsAsynchronously);
 
 			void ProcessExited(object sender, EventArgs e)
 			{

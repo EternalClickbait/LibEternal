@@ -36,7 +36,7 @@ namespace LibEternal.Tests.Collections
 		[Test]
 		public void IsEmpty_Tests()
 		{
-			ConcurrentHashSet<int> set = new ConcurrentHashSet<int>();
+			var set = new ConcurrentHashSet<int>();
 			Assert.True(set.IsEmpty, "Set should be empty");
 
 			set.Add(0);
@@ -46,7 +46,7 @@ namespace LibEternal.Tests.Collections
 		[Test]
 		public void Count_Tests()
 		{
-			ConcurrentHashSet<int> set = new ConcurrentHashSet<int>(1, 10);
+			var set = new ConcurrentHashSet<int>(1, 10);
 			Assert.Zero(set.Count);
 
 			const int itemsToAddPerIteration = 100;
@@ -69,40 +69,69 @@ namespace LibEternal.Tests.Collections
 		[Test]
 		public void ICollection_IsReadonly_IsFalse()
 		{
+			// ReSharper disable once CollectionNeverUpdated.Local
 			ICollection<int> collection = new ConcurrentHashSet<int>();
 			Assert.False(collection.IsReadOnly);
 		}
 
+
 		//This is just there to cover the ICollection<T> overloads
 		[Test]
-		public void ICollection_Overloads_AreCovered()
+		public void ICollection_AddAndRemove_ModifyCollection()
 		{
-			const int dummyNumber = 0;
+			const int dummyNumberMax = 1000;
 			ICollection<int> collection = new ConcurrentHashSet<int>();
+			Assert.IsEmpty(collection); //No-one wants to be measuring a collection's size when it didn't start off empty
 
-			collection.Add(dummyNumber);
-			Assert.AreEqual(1, collection.Count);
-
-			collection.Remove(dummyNumber);
-			Assert.AreEqual(0, collection.Count);
-
-			//Enumerating should never throw
-			Assert.DoesNotThrow(() =>
+			for (int i = 0; i < dummyNumberMax; i++)
 			{
-				collection.Add(dummyNumber);
-				//Loop over to test the enumerator's MoveNext()
-				foreach (int _ in collection)
-				{
-				}
+				collection.Add(i);
+				//If i is 0, we will already have added it, so we will have i+1 = 1 items
+				Assert.AreEqual(i + 1, collection.Count);
+			}
 
-				collection.Remove(dummyNumber);
-			});
+			for (int i = dummyNumberMax - 1; i >= 0; i--)
+			{
+				collection.Remove(i);
+				Assert.AreEqual(i, collection.Count);
+			}
+		}
+
+		[Test]
+		public void Clear_SetsSizeToZero()
+		{
+			var set = new ConcurrentHashSet<int>(Enumerable.Range(0, 1000));
+			set.Clear();
+			Assert.Zero(set.Count);
+		}
+
+		[Test]
+		public void TryRemove_ReturnsTrueIfItemRemoved()
+		{
+			var set = new ConcurrentHashSet<int>(new[] {0});
+			//Removing a value should return true if it was actually removed
+			Assert.True(set.TryRemove(0));
+			Assert.False(set.TryRemove(89443212));
+		}
+
+		[Test]
+		public void Contains_Tests()
+		{
+			var set = new ConcurrentHashSet<int>();
 			
-			collection.Add(dummyNumber);
-			//We want to ensure that the collection isn't empty, or clearing it is pointless
-			Assert.NotZero(collection.Count);
-			collection.Clear();
-			
+		}
+
+		[Test]
+		public void CopyTo_Tests()
+		{
+			int[] sourceNumbers = Enumerable.Range(0, 1000).ToArray();
+
+			ICollection<int> collection = new ConcurrentHashSet<int>(sourceNumbers);
+
+			var result = new int[sourceNumbers.Length];
+
+			collection.CopyTo(result, 0);
+			CollectionAssert.AreEquivalent(sourceNumbers, result);
 		}
 	}
 }
