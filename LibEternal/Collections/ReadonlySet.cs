@@ -66,7 +66,7 @@ namespace LibEternal.Collections
 
 		//TODO: Should add support for this soon, and tests
 		/// <inheritdoc />
-		public void CopyTo(T[] array, int startIndex)
+		public void CopyTo(T[] array, int startIndex = 0)
 		{
 			set.CopyTo(array, startIndex);
 		}

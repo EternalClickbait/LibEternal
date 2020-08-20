@@ -50,6 +50,8 @@
         <Compile Include="Abstraction\SmartDisposableTests.cs" />
         <Compile Include="Callbacks\SafeActionTests.cs" />
         <Compile Include="Callbacks\SafeFuncTests.cs" />
+        <Compile Include="Collections\ConcurrentHashSetTests.cs" />
+        <Compile Include="Collections\ReadonlySetTests.cs" />
         <Compile Include="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
