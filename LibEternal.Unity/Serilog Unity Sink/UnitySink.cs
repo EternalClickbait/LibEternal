@@ -21,6 +21,7 @@ namespace Serilog.Sinks.Unity
 		/// <summary>
 		/// Constructs a new <see cref="UnitySink"/>, using the optional <see cref="IFormatProvider"/>
 		/// </summary>
+		/// <param name="template">The template used to format messages before they are logged</param>
 		/// <param name="formatProvider"></param>
 		public UnitySink([NotNull] string template, IFormatProvider formatProvider)
 		{

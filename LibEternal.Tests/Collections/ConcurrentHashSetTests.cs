@@ -118,7 +118,13 @@ namespace LibEternal.Tests.Collections
 		public void Contains_Tests()
 		{
 			var set = new ConcurrentHashSet<int>();
-			
+			const int iterations = 1000;
+			for (int i = 0; i < iterations; i++)
+			{
+				Assert.False(set.Contains(i)); //Not added yet, so false
+				set.Add(i);
+				Assert.True(set.Contains(i)); //Added, so true
+			}
 		}
 
 		[Test]

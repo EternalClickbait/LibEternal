@@ -1,7 +1,6 @@
 ﻿using LibEternal.Extensions;
 using LibEternal.Helper;
 using LibEternal.JetBrains.Annotations;
-using LibEternal.Unity.Editor.Extensions;
 using System.IO;
 using UnityEditor;
 using UnityEngine;

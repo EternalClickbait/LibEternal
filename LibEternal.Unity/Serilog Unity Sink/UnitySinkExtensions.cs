@@ -14,6 +14,7 @@ namespace Serilog.Sinks.Unity
 		///     Writes log events to Unity's <see cref="UnityEngine.Debug" /> class;
 		/// </summary>
 		/// <param name="loggerSinkConfiguration">Logger sink configuration</param>
+		/// <param name="template">The template used to format messages before they are logged</param>
 		/// <param name="formatProvider">An <see cref="IFormatProvider" /> used to render the messages</param>
 		/// <returns>A <see cref="LoggerConfiguration" /> that can be method-chained</returns>
 		public static LoggerConfiguration Unity3D(this LoggerSinkConfiguration loggerSinkConfiguration, string template, IFormatProvider formatProvider = null)

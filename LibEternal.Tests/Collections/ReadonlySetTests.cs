@@ -105,7 +105,7 @@ namespace LibEternal.Tests.Collections
 			var readonlyResult = new int[original.Count];
 			
 			original.CopyTo(originalResult);
-			readonlySet.CopyTo(readonlyResult, 0);
+			readonlySet.CopyTo(readonlyResult);
 			CollectionAssert.AreEquivalent(originalResult, readonlyResult);
 		}
 	}

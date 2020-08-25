@@ -50,8 +50,8 @@ namespace LibEternal.Tests.Abstraction
 			void CreateDisposableGarbage()
 			{
 				// This will go out of scope after this function is executed. Otherwise, it won't be collected
-				Disposable disposable = new Disposable {OnDisposeInherited = () => disposeCalled = true};
-				weakRef = new WeakReference<Disposable>(disposable, false);
+				Disposable temp = new Disposable {OnDisposeInherited = () => disposeCalled = true};
+				weakRef = new WeakReference<Disposable>(temp, false);
 			}
 
 			// Create the garbage, then collect all objects

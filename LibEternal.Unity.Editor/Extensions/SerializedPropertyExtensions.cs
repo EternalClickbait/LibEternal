@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using UnityEditor;
 
-namespace LibEternal.Unity.Editor.Extensions
+namespace LibEternal.Unity.Editor
 {
 	/// <summary>
 	///     A class of extensions for a <see cref="SerializedProperty" />
