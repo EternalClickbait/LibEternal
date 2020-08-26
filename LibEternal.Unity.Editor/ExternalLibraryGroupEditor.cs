@@ -7,6 +7,7 @@ using UnityEditor;
 using UnityEngine;
 using static LibEternal.Extensions.IoExtensions;
 using Debug = UnityEngine.Debug;
+
 // ReSharper disable RedundantLogicalConditionalExpressionOperand
 
 // ReSharper disable ConditionIsAlwaysTrueOrFalse
@@ -126,12 +127,15 @@ namespace LibEternal.Unity.Editor
 						else
 						{
 							//Trim the newlines so the user can see if the build failed without expanding the debug message
-							// ReSharper disable once RedundantAssignment
 							string trimmedOutput = (await process.StandardOutput.ReadToEndAsync()).TrimStart('\r', '\n');
+							bool buildFailed = trimmedOutput.Contains("Build FAILED");
 							//This formats the elapsed time as <minutes (short)> minutes and <seconds (long)>.<decimal seconds (short> seconds
 							//e.g. 0min 5.325s => "0 minutes and 5.32 seconds"
 							if (!Silent)
-								Debug.Log($"\t\tBuilt {fileInfo.Name} in {stopwatch.Elapsed:m\\:ss}. Output was: {trimmedOutput}");
+								if (buildFailed)
+									Debug.LogError($"\t\tBuilt {fileInfo.Name} in {stopwatch.Elapsed:m\\:ss}. Output was: {trimmedOutput}");
+								else
+									Debug.Log($"\t\tBuilt {fileInfo.Name} in {stopwatch.Elapsed:m\\:ss}. Output was: {trimmedOutput}");
 							process.Dispose();
 						}
 					}
