@@ -3,14 +3,16 @@ using Serilog;
 using Serilog.Enrichers;
 using Serilog.Exceptions;
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using System.Threading;
+
+[assembly: ExcludeFromCodeCoverage]
 
 namespace LibEternal.Testing
 {
 	internal static class Program
 	{
-		//TODO: Unit tests!
 		private static string BuildOutputTemplate(TimeStampMode timeStampMode, LogLevelMode logLevelMode = LogLevelMode.Full,
 		                                          bool includeProperties = false)
 		{
@@ -84,15 +86,15 @@ namespace LibEternal.Testing
 			Thread.CurrentThread.Name = "True Thread Name";
 			Log.Information("Custom should be null");
 			Log.Information("True: {TrueThreadName}, Custom: {CustomThreadName}", Thread.CurrentThread.Name, Thread.CurrentThread.GetThreadName());
-			
+
 			Thread.CurrentThread.SetThreadName("Custom Thread Name");
 			Log.Information("Neither should be null");
 			Log.Information("True: {TrueThreadName}, Custom: {CustomThreadName}", Thread.CurrentThread.Name, Thread.CurrentThread.GetThreadName());
-			
+
 			// for (int i = 0; i < 3; i++)
 			// {
-				// Thread.CurrentThread($"Name at iteration {i}");
-				// Log.Information("Iteration {Index}: {ThreadName}", i, Thread.CurrentThread.Name);
+			// Thread.CurrentThread($"Name at iteration {i}");
+			// Log.Information("Iteration {Index}: {ThreadName}", i, Thread.CurrentThread.Name);
 			// }
 
 			Log.CloseAndFlush();

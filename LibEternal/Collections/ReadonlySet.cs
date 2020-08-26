@@ -64,7 +64,6 @@ namespace LibEternal.Collections
 			return set.Contains(i);
 		}
 
-		//TODO: Should add support for this soon, and tests
 		/// <inheritdoc />
 		public void CopyTo(T[] array, int startIndex = 0)
 		{
