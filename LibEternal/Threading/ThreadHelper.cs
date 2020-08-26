@@ -1,9 +1,8 @@
 ﻿using LibEternal.JetBrains.Annotations;
-using LibEternal.Threading;
 using System.Collections.Generic;
 using System.Threading;
 
-namespace LibEternal.Helper
+namespace LibEternal.Threading
 {
 	/// <summary>
 	///     An extension class for <see cref="Thread" />s
@@ -23,12 +22,13 @@ namespace LibEternal.Helper
 		/// <summary>
 		///     An <see cref="IThreadSwitcher" /> that switches to a <see cref="ThreadPool" /> <see cref="Thread" />
 		/// </summary>
-		internal static IThreadSwitcher ThreadPoolSwitcher = new ThreadSwitcherTask();
+		private static readonly IThreadSwitcher ThreadPoolSwitcher = new ThreadSwitcherTask();
 
 		/// <summary>
 		///     An <see cref="IThreadSwitcher" /> that switches to the main <see cref="Thread" />
 		/// </summary>
-		internal static IThreadSwitcher MainThreadSwitcher = null;
+		// ReSharper disable once InconsistentNaming
+		private static IThreadSwitcher MainThreadSwitcher = null;
 
 		/// <summary>
 		///     Sets the <see cref="MainThreadSwitcher" /> used to switch to the main <see cref="Thread" />. Will only work if it has not been set already

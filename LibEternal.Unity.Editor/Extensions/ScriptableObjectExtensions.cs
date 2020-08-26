@@ -2,7 +2,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace LibEternal.Unity.Editor
+namespace LibEternal.Unity.Editor.Extensions
 {
 	/// <summary>
 	///     An extension class for a <see cref="ScriptableObject" />

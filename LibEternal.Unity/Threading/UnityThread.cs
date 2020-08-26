@@ -1,29 +1,22 @@
-﻿using System.Threading;
+﻿using Serilog;
+using System.Threading;
 using UnityEngine;
-
-#if UNITY_EDITOR
-using UnityEditor;
-
-#endif
 
 // ReSharper disable once CheckNamespace
 namespace LibEternal.Threading
 {
 	internal static class UnityThread
 	{
-		private static SynchronizationContext context;
+		public static SynchronizationContext Context { get; private set; }
 
-		// ReSharper disable once ConvertToAutoPropertyWithPrivateSetter
-		public static SynchronizationContext Context => context;
-
-
-#if UNITY_EDITOR
-        [InitializeOnLoadMethod]
-#endif
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-		private static void Capture()
+		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+		internal static void Capture()
 		{
-			context = SynchronizationContext.Current;
+			//Save the context as soon as unity loads
+			Context = SynchronizationContext.Current;
+			Log.Information("Captured Unity Context");
+			//Now assign the IThreadSwitcher in ThreadHelper, otherwise we'll get NullReferenceExceptions
+			ThreadHelper.SetMainThreadSwitcher(new ThreadSwitcherUnity());
 		}
 	}
 }
