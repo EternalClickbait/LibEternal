@@ -7,7 +7,7 @@ using UnityEngine;
 namespace LibEternal.Unity
 {
 	[DefaultExecutionOrder(1000)]
-	public sealed class LateEventForwarder : MonoBehaviour
+	public sealed class LateEventForwarder : SingletonMonoBehaviour<LateEventForwarder>
 	{
 		private void FixedUpdate()
 		{
@@ -18,19 +18,24 @@ namespace LibEternal.Unity
 		{
 			OnLateUpdate?.Invoke();
 		}
-
-	#region Singleton
-
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-		private static void CreateInstance()
-		{
-			Singleton.ForceSingleton<LateEventForwarder>();
-		}
-
-	#endregion
-
+		
 		[UsedImplicitly] public static event Action OnLateUpdate;
 
 		[UsedImplicitly] public static event Action OnLateFixedUpdate;
+
+		/// <inheritdoc />
+		protected override void SingletonAwakened()
+		{
+		}
+
+		/// <inheritdoc />
+		protected override void SingletonStarted()
+		{
+		}
+
+		/// <inheritdoc />
+		protected override void SingletonDestroyed()
+		{
+		}
 	}
 }

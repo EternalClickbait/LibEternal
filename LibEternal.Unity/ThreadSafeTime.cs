@@ -7,31 +7,32 @@ using UnityEngine;
 namespace LibEternal.Unity
 {
 	[PublicAPI]
-	public sealed class ThreadSafeTime : MonoBehaviour
+	public sealed class ThreadSafeTime : SingletonMonoBehaviour<ThreadSafeTime>
 	{
+		
 		//Update every 1 ms. Use a cached wait to avoid allocating every time. (Only 20b/update but better safe than sorry) 
 		private static readonly WaitForSeconds Wait = new WaitForSeconds(0.001f);
+		
 		public static float Time { get; private set; }
 
-	#region Singleton
-
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-		private static void CreateInstance()
-		{
-			// ReSharper disable once CommentTypo
-			// DontDestroyOnLoad(
-			// new GameObject(nameof(ThreadSafeTime))
-			// .AddComponent<ThreadSafeTime>());
-			Singleton.ForceSingleton<ThreadSafeTime>();
-		}
-
-	#endregion
-
-		private void Awake()
+		/// <inheritdoc />
+		protected override void SingletonAwakened()
 		{
 			StartCoroutine(UpdateTimeRoutine());
 		}
 
+		/// <inheritdoc />
+		protected override void SingletonStarted()
+		{
+			UpdateTime();
+		}
+
+		/// <inheritdoc />
+		protected override void SingletonDestroyed()
+		{
+			UpdateTime();
+		}
+		
 		private static IEnumerator UpdateTimeRoutine()
 		{
 			while (true)

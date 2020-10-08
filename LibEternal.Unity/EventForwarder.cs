@@ -8,12 +8,8 @@ namespace LibEternal.Unity
 {
 	[DefaultExecutionOrder(-1000)]
 	[PublicAPI]
-	public class EventForwarder : MonoBehaviour
+	public class EventForwarder : SingletonMonoBehaviour<EventForwarder>
 	{
-		private EventForwarder()
-		{
-		}
-
 		private void FixedUpdate()
 		{
 			OnFixedUpdate?.Invoke();
@@ -24,24 +20,24 @@ namespace LibEternal.Unity
 			OnUpdate?.Invoke();
 		}
 
-	#region Singleton
-
-		[RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-		private static void CreateInstance()
-		{
-			// ReSharper disable once CommentTypo
-			// DontDestroyOnLoad(
-			// new GameObject(nameof(EventForwarder))
-			// .AddComponent<EventForwarder>());
-			Singleton.ForceSingleton<EventForwarder>();
-		}
-
-	#endregion
-
-		// ReSharper disable InconsistentNaming
 		public static event Action OnUpdate;
 
 		public static event Action OnFixedUpdate;
-		// ReSharper restore InconsistentNaming
+
+		/// <inheritdoc />
+		protected override void SingletonAwakened()
+		{
+			
+		}
+
+		/// <inheritdoc />
+		protected override void SingletonStarted()
+		{
+		}
+
+		/// <inheritdoc />
+		protected override void SingletonDestroyed()
+		{
+		}
 	}
 }
