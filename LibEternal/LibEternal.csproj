@@ -49,6 +49,16 @@
         <DesignTime>True</DesignTime>
         <DependentUpon>SafeAction.tt</DependentUpon>
       </Compile>
+      <Compile Update="Callbacks\Generic\SafeAction.cs">
+        <AutoGen>True</AutoGen>
+        <DesignTime>True</DesignTime>
+        <DependentUpon>SafeAction.tt</DependentUpon>
+      </Compile>
+      <Compile Update="Callbacks\Generic\SafeFunc.cs">
+        <AutoGen>True</AutoGen>
+        <DesignTime>True</DesignTime>
+        <DependentUpon>SafeFunc.tt</DependentUpon>
+      </Compile>
     </ItemGroup>
 
     <ItemGroup>
