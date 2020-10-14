@@ -1,7 +1,9 @@
 ﻿using JetBrains.Annotations;
 using LibEternal.Exceptions;
 using Serilog;
+using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 //From https://gist.github.com/rickyah/271e3aa31ff8079365bc
 //Modified to fit my needs
@@ -11,7 +13,7 @@ namespace LibEternal.Unity
 	/// <summary>
 	///     This is a generic Singleton implementation for <see cref="MonoBehaviour"/>s.
 	///     Create a derived class where the type <typeparamref name="T"/> is the script you want to "Singletonize"
-	///     Upon loading it will call <see cref="Object.DontDestroyOnLoad"/> on the <see cref="GameObject"/> where this script is contained
+	///     Upon loading it will call <see cref="UnityEngine.Object.DontDestroyOnLoad"/> on the <see cref="GameObject"/> where this script is contained
 	///     so it persists upon <see cref="UnityEngine.SceneManagement.Scene"/> changes.
 	/// </summary>
 	/// <remarks>
@@ -178,6 +180,14 @@ namespace LibEternal.Unity
 			if (instance == null)
 			{
 				instance = thisInstance;
+				try
+				{
+					DontDestroyOnLoad(thisInstance.gameObject);
+				}
+				catch (Exception e)
+				{
+					Log.Warning(e,"Couldn't call {Method} for singleton {Type}", (Action<Object>) DontDestroyOnLoad, typeof(T));
+				}
 			}
 
 			else if (thisInstance != instance)
