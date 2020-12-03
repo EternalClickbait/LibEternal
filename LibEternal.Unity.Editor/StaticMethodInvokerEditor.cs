@@ -16,11 +16,6 @@ namespace LibEternal.Unity.Editor
 	public sealed class StaticMethodInvokerEditor : UnityEditor.Editor
 	{
 		/// <summary>
-		///     The binding flags used to search for methods
-		/// </summary>
-		private const BindingFlags Flags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
-
-		/// <summary>
 		///     A list of all methods we found
 		/// </summary>
 		private readonly List<MethodInfo> staticMethods = new List<MethodInfo>(100);
@@ -44,14 +39,15 @@ namespace LibEternal.Unity.Editor
 			AssemblyReloadEvents.afterAssemblyReload -= Init;
 			AssemblyReloadEvents.afterAssemblyReload += Init;
 
-			//Get a list of all types in the assembly
-			Type[] types = Assembly.GetAssembly(typeof(StaticMethodInvoker)).GetTypes();
+			//Get a list of all types in the assemblies currently loaded
+			var types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes());
+			
 			//Scan for static methods with no parameters
 			staticMethods.Clear();
-			for (int i = 0; i < types.Length; i++)
+			foreach(Type currentType in types)
 			{
-				Type currentType = types[i];
-				MethodInfo[] methods = currentType.GetMethods(Flags);
+				const BindingFlags flags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
+				var methods = currentType.GetMethods(flags);
 
 				for (int j = 0; j < methods.Length; j++)
 				{
