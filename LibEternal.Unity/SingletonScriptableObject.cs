@@ -3,7 +3,7 @@ using Serilog;
 using System;
 using UnityEngine;
 
-namespace Core
+namespace LibEternal.Unity
 {
 	/// <summary>
 	/// A base class to inherit from to create a singleton <see cref="ScriptableObject"/>. Useful when a manager-type class is required with access to assets (e.g. a prefab manager or audio manager)
