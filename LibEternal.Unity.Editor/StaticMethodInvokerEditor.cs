@@ -1,3 +1,4 @@
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -5,7 +6,6 @@ using System.Linq;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 
 namespace LibEternal.Unity.Editor
 {
@@ -36,28 +36,51 @@ namespace LibEternal.Unity.Editor
 
 		private void Init()
 		{
+			return;
 			AssemblyReloadEvents.afterAssemblyReload -= Init;
 			AssemblyReloadEvents.afterAssemblyReload += Init;
 
 			//Get a list of all types in the assemblies currently loaded
-			var types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(a => a.GetTypes());
+			var types = AppDomain.CurrentDomain.GetAssemblies().SelectMany(
+				assembly =>
+				{
+					try
+					{
+						//This sometimes throws
+						return assembly.GetTypes();
+					}
+					//This can occur if .Net can't load one of the assemblies required for a type.
+					catch (ReflectionTypeLoadException e)
+					{
+						Log.Verbose(e, "Caught exception when scanning assembly {Assembly} for types", assembly);
+						//Return the types we managed to load. Failed ones are null, so remove them
+						return e.Types.Where(t => t != null);
+					}
+				});
 			
 			//Scan for static methods with no parameters
 			staticMethods.Clear();
 			foreach(Type currentType in types)
 			{
 				const BindingFlags flags = BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic;
-				var methods = currentType.GetMethods(flags);
-
-				for (int j = 0; j < methods.Length; j++)
+				try
 				{
-					MethodInfo currentMethod = methods[j];
-					//Ensure it's static, has no parameters and isn't generic
-					if (!currentMethod.IsStatic) continue;
-					if (currentMethod.GetParameters().Length != 0) continue;
-					if (currentMethod.IsGenericMethod) continue;
+					var methods = currentType.GetMethods(flags);
+					for (int j = 0; j < methods.Length; j++)
+					{
+						MethodInfo currentMethod = methods[j];
+						//Ensure it's static, has no parameters and isn't generic
+						if (!currentMethod.IsStatic) continue;
+						if (currentMethod.GetParameters().Length != 0) continue;
+						if (currentMethod.IsGenericMethod) continue;
 
-					staticMethods.Add(currentMethod);
+						staticMethods.Add(currentMethod);
+					}
+				}
+				//This should cover exceptions like ReflectionTypeLoadExceptions, and TypeLoadExceptions
+				catch (SystemException e)
+				{
+					Log.Verbose(e, "Caught exception when scanning type {Type} for methods", currentType);
 				}
 			}
 		}
@@ -75,14 +98,14 @@ namespace LibEternal.Unity.Editor
 				}
 
 				//Format all the names
-				string[] methodNames = staticMethods.Select(FormatMethodName).ToArray();
+				var methodNames = staticMethods.Select(FormatMethodName).ToArray();
 				shortViewMethodIndex = EditorGUILayout.Popup("Method:", shortViewMethodIndex, methodNames);
 
 				if (GUILayout.Button("Invoke"))
 				{
 					object returnValue = staticMethods.First(m => FormatMethodName(m) == methodNames[shortViewMethodIndex])
 						.Invoke(null, new object[0]);
-					Debug.Log($"Return value was: {returnValue ?? "<null>"}");
+					Log.Information("Return value was: {ReturnValue}", returnValue ?? "<null>");
 				}
 			}
 			else
@@ -92,7 +115,7 @@ namespace LibEternal.Unity.Editor
 
 				const string globalNamespaceString = "<Global Namespace>";
 				//Get a list of all the namespaces from all the methods. If it is in the global namespace, use the const value instead.
-				string[] namespaces = staticMethods.Select(m => m.DeclaringType?.Namespace ?? globalNamespaceString).Distinct().ToArray();
+				var namespaces = staticMethods.Select(m => m.DeclaringType?.Namespace ?? globalNamespaceString).Distinct().ToArray();
 				//Let the user choose which namespace to search
 				namespaceIndex = EditorGUILayout.Popup("Namespace:", namespaceIndex, namespaces);
 
@@ -101,7 +124,7 @@ namespace LibEternal.Unity.Editor
 				if (namespaces[namespaceIndex] == globalNamespaceString)
 				{
 					//Get all the methods where their class's namespace is null
-					IEnumerable<MethodInfo> methodTypes = staticMethods.Where(m => m.DeclaringType?.Namespace == null);
+					var methodTypes = staticMethods.Where(m => m.DeclaringType?.Namespace == null);
 					//And get their declaring class
 					types = methodTypes.Select(m => m.DeclaringType).Distinct().ToArray();
 				}
@@ -132,7 +155,7 @@ namespace LibEternal.Unity.Editor
 						m.DeclaringType == types[typeIndex]
 						&& m.Name == methodNames[methodIndex]
 					).Invoke(null, new object[0]);
-					Debug.Log($"Return value was: {returnValue ?? "<null>"}");
+					Log.Information("Return value was: {ReturnValue}", returnValue ?? "<null>");
 				}
 			}
 
@@ -140,11 +163,11 @@ namespace LibEternal.Unity.Editor
 			// ReSharper disable once InvertIf
 			if (GUILayout.Button("Update list of functions", EditorStyles.miniButtonMid))
 			{
-				Stopwatch stopwatch = Stopwatch.StartNew();
+				var stopwatch = Stopwatch.StartNew();
 				Init();
 				stopwatch.Stop();
 
-				Debug.Log($"Updating function list took {stopwatch.Elapsed.TotalMilliseconds:n2}ms");
+				Log.Information("Updating function list took {Elapsed:n2}ms", stopwatch.Elapsed.TotalMilliseconds);
 			}
 		}
 	}
