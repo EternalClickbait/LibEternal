@@ -49,6 +49,17 @@ namespace LibEternal.Helper
 			value = updateDelegate(value);
 		}
 
+		/// <summary>
+		///     An implicit operator that converts a <see cref="Cached{T}" /> into an object of type <typeparamref name="T" />, by returning the
+		///     <paramref name="cached" />'s <see cref="Value" /> property
+		/// </summary>
+		/// <param name="cached">The <see cref="Cached{T}"/> object to convert into a <typeparamref name="T"/> object</param>
+		/// <returns>The currently stored <see cref="Value"/></returns>
+		public static implicit operator T(Cached<T> cached)
+		{
+			return cached.Value;
+		}
+
 	#region Constructors
 
 		/// <summary>
