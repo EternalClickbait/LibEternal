@@ -33,7 +33,7 @@ namespace Serilog.Sinks.Unity
 		{
 			//TODO: Maybe disable unity's stack trace appending while the message is being logged if a stack trace is present,
 			//TODO: so we don't get double (and worse) traces)
-			using (StringWriter writer = new StringWriter())
+			using (var writer = new StringWriter())
 			{
 				formatter.Format(logEvent, writer);
 				string message = writer.ToString();
