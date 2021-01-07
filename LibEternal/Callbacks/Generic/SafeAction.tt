@@ -10,14 +10,10 @@
 #>
 
 <#+
-		//CONFIG!!!
-		//The maximum amount of generic type arguments 
 		private const byte MaxGenericTypeArgs = 2;
 		private const string OutputFileFormat = NonGenericTypeName + "`{0}.cs";
 		private const string NonGenericTypeName = "SafeAction";
-#>
 
-<#+
 	/// <summary>
 	///     Makes a string containing generic arguments XML-safe
 	/// </summary>
@@ -25,35 +21,26 @@
 	{
 		return str.Replace('<', '{').Replace('>', '}');
 	}
-#>
 
-<#+
+		//This creates a new class
 	private void Create(int numTypeArgs)
 	{
-		ClearIndent();
-#>
-//Generated using T4 templates
-
-using LibEternal.JetBrains.Annotations;
-using LibEternal.Collections;
-using System;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-
-namespace LibEternal.Callbacks.Generic
-{
-<#+
 		if (numTypeArgs < 0)
 		{
 			Error($"Number of type args below 0: {numTypeArgs}");
 			return;
 		}
+		//Clear the indent so the files dont look weird
+		ClearIndent();
+
+
+		//The generic type arguments e.g. "<T1, T2>"
 		string genericTypeArgs;
 		//No args
 		if (numTypeArgs == 0) genericTypeArgs = "";
 		else
 		{
-			StringBuilder typeArgBuilder = new StringBuilder("<");
+			var typeArgBuilder = new StringBuilder("<");
 			for (int i = 0; i < numTypeArgs; i++)
 			{
 				//Append a new generic type argument e.g. "T1"
@@ -61,62 +48,18 @@ namespace LibEternal.Callbacks.Generic
 				//Add a ', ' if it's not the last type arg
 				if (i < numTypeArgs - 1) typeArgBuilder.Append(", ");
 			}
+			//Close it
 			typeArgBuilder.Append('>');
 
 			genericTypeArgs = typeArgBuilder.ToString();
 		}
+		//E.g. SafeAction<T1, T2>
 		string fullTypeName = NonGenericTypeName + genericTypeArgs;
+		//E.g. "Action<T1, T2>"
 		string baseCallbackTypeName = $"Action{genericTypeArgs}";
-		Console.WriteLine($"Generating {fullTypeName} ({baseCallbackTypeName})");
+		
+		
 
-		PushIndent("\t");
-#>
-/// <summary>
-///     A safe alternative to an <see cref="<#= MakeXmlSafe(baseCallbackTypeName) #>" />
-/// </summary>
-[PublicAPI, CompilerGenerated]
-<#=numTypeArgs != 0 ? "[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]" : "" /*Code coverage will only cover non-generic, so do this to make it appear that everything is covered*/ #>
-public sealed class <#= fullTypeName #>
-{
-<#+
-		PushIndent("\t");
-#>
-/// <summary>
-///     The <see cref="HashSet{T}" /> of callbacks.
-/// </summary>
-private readonly HashSet<<#= baseCallbackTypeName #>> callbacks;
-
-/// <summary>
-///     An event used to add and remove <see cref="<#=MakeXmlSafe(baseCallbackTypeName) #>" />s from the invocation list
-/// </summary>
-public event <#=baseCallbackTypeName #> Event
-{
-	add => callbacks.Add(value);
-	remove => callbacks.Remove(value);
-}
-
-/// <summary>
-///     A readonly wrapper around the set of callbacks, to allow read-only access
-/// </summary>
-public readonly ReadonlySet<<#= baseCallbackTypeName #>> Callbacks;
-
-<#+
-
-#>
-/// <summary>
-///     The constructor to instantiate a new <see cref="<#= MakeXmlSafe(fullTypeName) #>" />
-/// </summary>
-/// <param name="callbacks">An optional <see cref="List{T}" /> of <see cref="Action" />s to use as a base</param>
-public <#= NonGenericTypeName #>([CanBeNull] IEnumerable<<#=baseCallbackTypeName #>> callbacks = null)
-{
-    // ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
-    if(callbacks is null) this.callbacks = new HashSet<<#=baseCallbackTypeName #>>();
-    else this.callbacks = new HashSet<<#=baseCallbackTypeName #>>(callbacks);
-    //Initialize the ReadonlySet field using our newly made HashSet
-    Callbacks = new ReadonlySet<<#= baseCallbackTypeName #>>(this.callbacks);
-}
-
-<#+
 		//A string for the parameters passed into InvokeSafe() (e.g. InvokeSafe<T0, T1>("T0 param0, T1 param1"))
 		string inputParams;
 		//A string for the parameters we pass into the callbacks (e.g. callbacks[i].Invoke("param1, param2"))
@@ -125,8 +68,8 @@ public <#= NonGenericTypeName #>([CanBeNull] IEnumerable<<#=baseCallbackTypeName
 		if (numTypeArgs == 0) inputParams = callbackParams = "";
 		else
 		{
-			StringBuilder inputParamsBuilder = new StringBuilder();
-			StringBuilder callbackParamsBuilder = new StringBuilder();
+			var inputParamsBuilder = new StringBuilder();
+			var callbackParamsBuilder = new StringBuilder();
 			for (int i = 0; i < numTypeArgs; i++)
 			{
 				string typeArgument = $"T{i}";
@@ -145,47 +88,108 @@ public <#= NonGenericTypeName #>([CanBeNull] IEnumerable<<#=baseCallbackTypeName
 			inputParams = inputParamsBuilder.ToString();
 			callbackParams = callbackParamsBuilder.ToString();
 		}
+
+
+		Console.WriteLine($"Generating {fullTypeName} ({baseCallbackTypeName})");
 #>
+//Generated using T4 templates
 
-/// <summary>
-///     Invokes the <see cref="callbacks" />, catching and returning all thrown <see cref="Exception" />s
-/// </summary>
-/// <returns>A <see cref="List{T}" /> of <see cref="Exception" />s that were thrown during invocation</returns>
-[NotNull]
-public List<Exception> InvokeSafe(<#= inputParams #>)
+using LibEternal.JetBrains.Annotations;
+using LibEternal.Collections;
+using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+
+namespace LibEternal.Callbacks.Generic
 {
-	List<Exception> exceptions = new List<Exception>();
 
-	foreach (<#= baseCallbackTypeName #> callback in callbacks)
+	/// <summary>
+	///     A safe alternative to an <see cref="<#= MakeXmlSafe(baseCallbackTypeName) #>" />
+	/// </summary>
+	[PublicAPI, CompilerGenerated]
+	<#=numTypeArgs != 0 ? "[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverageAttribute]" : "" /*Code coverage will only cover non-generic, so do this to make it appear that everything is covered*/ #>
+	public sealed class <#= fullTypeName #>
 	{
-		try
+		/// <summary>
+		///     The <see cref="HashSet{T}" /> of callbacks.
+		/// </summary>
+		private readonly HashSet<<#= baseCallbackTypeName #>> callbacks;
+		
+		/// <summary>
+		///     An event used to add and remove <see cref="<#=MakeXmlSafe(baseCallbackTypeName) #>" />s from the invocation list
+		/// </summary>
+		public event <#=baseCallbackTypeName #> Event
 		{
-            if(callback is null) continue;
-            callback.Invoke(<#= callbackParams #>);
+			add => callbacks.Add(value);
+			remove => callbacks.Remove(value);
 		}
-		//Called if there's an exception in one of the callbacks
-		catch (Exception e)
+
+        /// <summary>
+		///     Adds a <see cref="<#=MakeXmlSafe(baseCallbackTypeName) #>" /> to the invocation list
+		/// </summary>
+        public void AddEvent(<#= baseCallbackTypeName #> callback){
+            callbacks.Add(callback);
+        }
+        
+        /// <summary>
+		///     Removes a <see cref="<#=MakeXmlSafe(baseCallbackTypeName) #>" /> from the invocation list
+		/// </summary>
+        public void RemoveEvent(<#= baseCallbackTypeName #> callback){
+            callbacks.Remove(callback);
+        }
+		
+		/// <summary>
+		///     A readonly wrapper around the set of callbacks, to allow read-only access
+		/// </summary>
+		public readonly ReadonlySet<<#= baseCallbackTypeName #>> Callbacks;
+	
+		/// <summary>
+		///     The constructor to instantiate a new <see cref="<#= MakeXmlSafe(fullTypeName) #>" />
+		/// </summary>
+		/// <param name="callbacks">An optional <see cref="List{T}" /> of <see cref="Action" />s to use as a base</param>
+		public <#= NonGenericTypeName #>([CanBeNull] IEnumerable<<#=baseCallbackTypeName #>> callbacks = null)
 		{
-			exceptions.Add(e);
+			// ReSharper disable once ConvertIfStatementToConditionalTernaryExpression
+			if(callbacks is null) this.callbacks = new HashSet<<#=baseCallbackTypeName #>>();
+			else this.callbacks = new HashSet<<#=baseCallbackTypeName #>>(callbacks);
+			//Initialize the ReadonlySet field using our newly made HashSet
+			Callbacks = new ReadonlySet<<#= baseCallbackTypeName #>>(this.callbacks);
+		}
+
+		/// <summary>
+		///     Invokes the <see cref="callbacks" />, catching and returning all thrown <see cref="Exception" />s
+		/// </summary>
+		/// <returns>A <see cref="List{T}" /> of <see cref="Exception" />s that were thrown during invocation</returns>
+		[NotNull]
+		public List<Exception> InvokeSafe(<#= inputParams #>)
+		{
+			var exceptions = new List<Exception>();
+		
+			foreach (<#= baseCallbackTypeName #> callback in callbacks)
+			{
+				try
+				{
+					if(callback is null) continue;
+					callback.Invoke(<#= callbackParams #>);
+				}
+				//Called if there's an exception in one of the callbacks
+				catch (Exception e)
+				{
+					exceptions.Add(e);
+				}
+			}
+		
+			return exceptions;
 		}
 	}
-
-	return exceptions;
-}
-<#+
-		//Write the closing indent (for the class and namespace)
-		ClearIndent();
-#>
-    }
 }<#+
 		//Save the output
 		SaveOutput(string.Format(OutputFileFormat, numTypeArgs));
 	}
 #>
-
 <#+
-		//Save Output function
-		//Lets us save to a different output file than the default. (credit: https://stackoverflow.com/a/44340464)
+	//Save Output function
+	//Lets us save to a different output file than the default. (credit: https://stackoverflow.com/a/44340464)
 	private void SaveOutput(string outputFileName)
 	{
 		string templateDirectory = Path.GetDirectoryName(Host.TemplateFile);

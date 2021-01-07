@@ -96,6 +96,20 @@ public event <#=baseCallbackTypeName #> Event
 }
 
 /// <summary>
+///     Adds a <see cref="<#=MakeXmlSafe(baseCallbackTypeName) #>" /> to the invocation list
+/// </summary>
+public void AddEvent(<#= baseCallbackTypeName #> callback){
+    callbacks.Add(callback);
+}
+
+/// <summary>
+///     Removes a <see cref="<#=MakeXmlSafe(baseCallbackTypeName) #>" /> from the invocation list
+/// </summary>
+public void RemoveEvent(<#= baseCallbackTypeName #> callback){
+    callbacks.Remove(callback);
+}
+
+/// <summary>
 ///     A readonly wrapper around the set of callbacks, to allow read-only access
 /// </summary>
 public readonly ReadonlySet<<#= baseCallbackTypeName #>> Callbacks;
