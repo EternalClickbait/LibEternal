@@ -15,5 +15,37 @@ namespace LibEternal.Unity.Extensions
 		{
 			return $"{scene.name} ({scene.path} # {scene.buildIndex})";
 		}
+
+		public static bool IsInvalidScene(this Scene scene)
+		{
+			/*
+			 * Valid Scene:
+			 * {
+			 *   "handle": -96740,
+			 *   "path": "Assets/Scenes/UI Prefab Editor.unity",
+			 *   "name": "2. Create Game Panel",
+			 *   "isLoaded": true,
+			 *   "buildIndex": -1,
+			 *   "isDirty": false,
+			 *   "rootCount": 4,
+			 *   "isSubScene": false
+			 * }
+			 * 
+			 * Invalid Scene (`default(Scene)`):
+			 * {
+			 *   "handle": 0,
+			 *   "isLoaded": false,
+			 *   "buildIndex": -1,
+			 *   "isDirty": false,
+			 *   "rootCount": 0,
+			 *   "isSubScene": true
+			 * }
+			 */
+
+			return scene.handle == 0
+			       || string.IsNullOrEmpty(scene.path)
+			       || string.IsNullOrEmpty(scene.name)
+			       || scene == default;
+		}
 	}
 }
