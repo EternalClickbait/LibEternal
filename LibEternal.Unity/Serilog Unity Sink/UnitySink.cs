@@ -38,23 +38,25 @@ namespace Serilog.Sinks.Unity
 				formatter.Format(logEvent, writer);
 				string message = writer.ToString();
 
+				LogType logType;
 				switch (logEvent.Level)
 				{
 					case LogEventLevel.Fatal:
 					case LogEventLevel.Error:
-						Debug.LogError(message);
+						logType = LogType.Error;
 						break;
 					case LogEventLevel.Warning:
-						Debug.LogWarning(message);
+						logType = LogType.Warning;
 						break;
 					case LogEventLevel.Information:
 					case LogEventLevel.Debug:
 					case LogEventLevel.Verbose:
-						Debug.Log(message);
+						logType = LogType.Log;
 						break;
 					default:
 						throw new ArgumentOutOfRangeException(nameof(logEvent));
 				}
+				Debug.LogFormat(logType, LogOption.NoStacktrace, null, message);
 			}
 		}
 	}
