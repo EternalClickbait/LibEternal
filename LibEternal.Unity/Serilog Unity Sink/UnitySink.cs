@@ -57,7 +57,8 @@ namespace Serilog.Sinks.Unity
 						throw new ArgumentOutOfRangeException(nameof(logEvent));
 				}
 				//We have to pass in the message as format param 0 because if it isn't a valid format string (e.g. "() => { }") it will throw if we pass it directly as the format.
-				Debug.LogFormat(logType, LogOption.NoStacktrace, null, "{0}", message);
+				//Debug.LogFormat(logType, LogOption.NoStacktrace, null, "{0}", message);
+				Debug.LogFormat(logType, LogOption.None, null, "{0}", message);
 			}
 		}
 	}
